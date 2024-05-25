@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Firebase uygulama kimliği -->
+    <string name="google_app_id">1:878422545265:android:beefe02682e99ce066dcd0</string>
+
+    <!-- Firebase proje kimliği -->
+    <string name="google_api_key">YOUR_GOOGLE_API_KEY</string>
+
+    <!-- Firebase proje numarası -->
+    <string name="firebase_database_url">YOUR_FIREBASE_DATABASE_URL</string>
+
+    <!-- Firebase depolama alanı -->
+    <string name="google_storage_bucket">YOUR_GOOGLE_STORAGE_BUCKET</string>
+
+    <!-- Firebase mesajlaşma göndericisi kimliği -->
+    <string name="gcm_defaultSenderId">YOUR_GCM_DEFAULT_SENDER_ID</string>
+
+    <!-- Firebase proje kimliği -->
+    <string name="project_id">noteapp-d0c50</string>
+</resources>
