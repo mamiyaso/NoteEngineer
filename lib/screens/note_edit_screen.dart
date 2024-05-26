@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class NoteEditScreen extends StatefulWidget {
   final Function onSave;
   final String? noteId;
   final String? initialTitle;
   final String? initialContent;
+  final String? initialUpdatedAt;
 
-  NoteEditScreen({required this.onSave, this.noteId, this.initialTitle, this.initialContent});
+  NoteEditScreen(
+      {required this.onSave, this.noteId, this.initialTitle, this.initialContent, this.initialUpdatedAt});
 
   @override
   _NoteEditScreenState createState() => _NoteEditScreenState();
@@ -16,18 +24,36 @@ class NoteEditScreen extends StatefulWidget {
 class _NoteEditScreenState extends State<NoteEditScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  final _mathController = TextEditingController();
+
+  final _contentFocusNode = FocusNode();
+  final _mathFocusNode = FocusNode();
+
   final _supabaseClient = Supabase.instance.client;
-  String _selectedDate = '24 Mayıs 2024 Cuma, 23:49';
-  String _selectedStyle = 'Çizgisiz';
+  DateTime? _selectedDate;
+  bool _showMathField = false;
+  String? _selectedDirectory;
+
   @override
   void initState() {
     super.initState();
+    _loadSelectedDirectory();
+
     if (widget.initialTitle != null) {
       _titleController.text = widget.initialTitle!;
     }
     if (widget.initialContent != null) {
       _contentController.text = widget.initialContent!;
     }
+    if (widget.initialUpdatedAt != null) {
+      _selectedDate = DateTime.parse(widget.initialUpdatedAt!);
+    }
+  }
+  Future<void> _loadSelectedDirectory() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedDirectory = prefs.getString('selected_directory');
+    });
   }
 
   Future<void> _saveNote() async {
@@ -54,92 +80,192 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
     widget.onSave();
     Navigator.pop(context);
   }
-  void _saveAndExit() {
-    _saveNote();
-    Navigator.pop(context);
+
+  Future<void> _deleteNote() async {
+    if (widget.noteId != null) {
+      await _supabaseClient.from('notes').update({
+        'is_trashed': true,
+      }).eq('id', widget.noteId as Object);
+      widget.onSave();
+      Navigator.pop(context);
+    }
   }
 
-  void _changeStyle(String style) {
+  void _toggleMathField() {
     setState(() {
-      _selectedStyle = style;
+      _showMathField = !_showMathField;
     });
   }
-  void _showStyleDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Sayfa Stili Seçin"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text("Çizgisiz"),
-                onTap: () {
-                  _changeStyle('Çizgisiz');
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text("Çizgili"),
-                onTap: () {
-                  _changeStyle('Çizgili');
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text("Kareli"),
-                onTap: () {
-                  _changeStyle('Kareli');
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+
+  void _calculateMathExpression() {
+    String expression = _mathController.text;
+    expression = _convertSymbolsToFunctions(expression);
+
+    final comparisonOperators = ['==', '!=', '<=', '>=', '<', '>'];
+    String? comparisonOperator;
+
+    for (var operator in comparisonOperators) {
+      if (expression.contains(operator)) {
+        comparisonOperator = operator;
+        break;
+      }
+    }
+
+    if (comparisonOperator != null) {
+      final parts = expression.split(comparisonOperator);
+      if (parts.length == 2) {
+        try {
+          Parser p = Parser();
+          Expression exp1 = p.parse(parts[0]);
+          Expression exp2 = p.parse(parts[1]);
+          ContextModel cm = ContextModel();
+
+          double result1 = exp1.evaluate(EvaluationType.REAL, cm);
+          double result2 = exp2.evaluate(EvaluationType.REAL, cm);
+
+          bool isValid;
+
+          switch (comparisonOperator) {
+            case '==':
+              isValid = result1 == result2;
+              break;
+            case '!=':
+              isValid = result1 != result2;
+              break;
+            case '<=':
+              isValid = result1 <= result2;
+              break;
+            case '>=':
+              isValid = result1 >= result2;
+              break;
+            case '<':
+              isValid = result1 < result2;
+              break;
+            case '>':
+              isValid = result1 > result2;
+              break;
+            default:
+              isValid = false;
+          }
+
+          String message = isValid ? 'Doğru' : 'Yanlış';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('İfade: $message')),
+          );
+
+          setState(() {
+            _contentController.text += '\n$expression = $message';
+            _mathController.clear();
+          });
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
         );
-      },
-    );
+      }
+    } else {
+      try {
+        Parser p = Parser();
+        Expression exp = p.parse(expression);
+        ContextModel cm = ContextModel();
+        double result = exp.evaluate(EvaluationType.REAL, cm);
+        String formattedResult = result.toStringAsFixed(3);
+        setState(() {
+          _contentController.text += '\n$expression = $formattedResult';
+          _mathController.clear();
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
+        );
+      }
+    }
+  }
+
+  String _convertSymbolsToFunctions(String expression) {
+    return expression
+        .replaceAll('≤', '<=')
+        .replaceAll('≥', '>=')
+        .replaceAll('√', 'sqrt')
+        .replaceAll('π', '3.14159')
+        .replaceAll('≈', '==')
+        .replaceAll('≠', '!=')
+        .replaceAll('±', '+-')
+    ;
+  }
+
+  Future<void> _saveToTextFile() async {
+    final String content = _titleController.text + '\n' + _contentController.text;
+    final String fileName = _titleController.text.replaceAll(RegExp(r'[^\w\s]+'), '').trim();
+
+    try {
+      String? selectedDirectory;
+      final prefs = await SharedPreferences.getInstance();
+      if (_selectedDirectory != null) {
+        selectedDirectory = _selectedDirectory!;
+      } else {
+        // Get the saved directory if exists, otherwise prompt user to select
+        selectedDirectory = prefs.getString('selected_directory') ?? await FilePicker.platform.getDirectoryPath();
+      }
+
+      final String filePath = '$selectedDirectory/$fileName.txt';
+      final File file = File(filePath);
+      await file.writeAsString(content);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Notunuz $fileName olarak kaydedildi!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Dosya kaydedilirken hata oluştu: $e')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _selectedDate = DateTime.now();
+    String formattedDate = _selectedDate != null
+        ? DateFormat('HH:mm dd.MM.yyyy').format(_selectedDate!)
+        : 'Tarih Yok';
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: _saveAndExit,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: _saveNote,
         ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
-              if (value == 'send') {
-                // PDF veya TXT olarak gönderme işlemleri
-              } else if (value == 'delete') {
-                // Silme işlemleri
-              } else if (value == 'style') {
-                // Sayfa stilini değiştirme işlemleri
-                _showStyleDialog();
+              if (value == 'delete') {
+                _deleteNote();
               } else if (value == 'save') {
-                // Kaydetme işlemleri
-                _saveAndExit();
+                _saveNote();
+              } else if (value == 'calculate') {
+                _toggleMathField();
+              } else if (value == 'save-txt') {
+                _saveToTextFile();
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'send',
-                child: Text('Gönder (PDF veya TXT)'),
-              ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'delete',
                 child: Text('Sil'),
               ),
-              PopupMenuItem(
-                value: 'style',
-                child: Text('Sayfa Stili'),
-              ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'save',
                 child: Text('Kaydet'),
+              ),
+              const PopupMenuItem(
+                value: 'calculate',
+                child: Text('Hesapla'),
+              ),
+              const PopupMenuItem(
+                value: 'save-txt',
+                child: Text('TXT Olarak Kaydet'),
               ),
             ],
           ),
@@ -152,40 +278,81 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+
                 TextField(
                   controller: _titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Başlık',
                     border: InputBorder.none,
-                    hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    hintStyle:
+                    TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  _selectedDate,
-                  style: TextStyle(color: Colors.grey),
+                  formattedDate,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                color: _selectedStyle == 'Çizgisiz'
-                    ? Colors.white
-                    : _selectedStyle == 'Çizgili'
-                    ? Colors.grey[200]
-                    : Colors.grey[300],
+          if (_showMathField)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      focusNode: _mathFocusNode,
+                      controller: _mathController,
+                      decoration: const InputDecoration(
+                        hintText: 'Matematiksel ifadeyi buraya girin...',
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.all(16.0),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.calculate),
+                    onPressed: _calculateMathExpression,
+                  ),
+                ],
               ),
-              child: TextField(
-                controller: _contentController,
-                decoration: InputDecoration(
-                  hintText: 'Notlarınızı buraya yazın...',
-                  border: InputBorder.none,
-                  isCollapsed: true,
+            ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                _contentFocusNode.requestFocus();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.white,
                 ),
-                maxLines: null,
+                child: TextField(
+                  focusNode: _contentFocusNode,
+                  controller: _contentController,
+                  decoration: const InputDecoration(
+                    hintText: 'Notlarınızı buraya yazın...',
+                    border: InputBorder.none,
+                    isCollapsed: true,
+                    contentPadding: EdgeInsets.all(16.0),
+                  ),
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  style: const TextStyle(fontSize: 16.0),
+                  textAlignVertical: TextAlignVertical.top,
+                  expands: true,
+                  buildCounter: (context,
+                      {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                  null,
+                ),
               ),
             ),
           ),
@@ -195,25 +362,26 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                _buildMathButton('√'),
-                _buildMathButton('π'),
-                _buildMathButton('∫'),
-                _buildMathButton('∑'),
-                _buildMathButton('∞'),
-                _buildMathButton('≈'),
-                _buildMathButton('≠'),
-                _buildMathButton('≤'),
-                _buildMathButton('≥'),
-                _buildMathButton('±'),
                 _buildMathButton('+'),
                 _buildMathButton('-'),
                 _buildMathButton('*'),
                 _buildMathButton('/'),
                 _buildMathButton('%'),
-                _buildMathButton('&'),
+                _buildMathButton('<'),
+                _buildMathButton('>'),
+                _buildMathButton('≈'),
+                _buildMathButton('≠'),
+                _buildMathButton('≤'),
+                _buildMathButton('≥'),
+                _buildMathButton('±'),
                 _buildMathButton('('),
                 _buildMathButton(')'),
-                // Daha fazla matematiksel sembol ekleyebilirsiniz
+                _buildMathButton('^'),
+                _buildMathButton('√'),
+                _buildMathButton('π'),
+                _buildMathButton('abs'),
+                _buildMathButton('log'),
+                _buildMathButton('ln'),
               ],
             ),
           ),
@@ -223,16 +391,22 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
   }
 
   Widget _buildMathButton(String symbol) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        _contentController.text += symbol;
+        if (_showMathField) {
+          _mathController.text += symbol;
+        } else {
+          _contentController.text += symbol;
+        }
       },
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+        width: 48,
+        height: 48,
         child: Text(
           symbol,
-          style: TextStyle(fontSize: 24),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );

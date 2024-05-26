@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SupabaseService {
@@ -112,25 +111,11 @@ class SupabaseService {
   Future<void> permanentlyDeleteAllNotes(String userId) async {
     await _client.from('notes').delete().eq('user_id', userId).eq('is_trashed', true);
   }
-  Future<File> createPdf(String title, String content) async {
-    final pdf = pw.Document();
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) => pw.Center(
-          child: pw.Column(
-            children: [
-              pw.Text(title, style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-              pw.SizedBox(height: 20),
-              pw.Text(content),
-            ],
-          ),
-        ),
-      ),
-    );
 
+  Future<File> createTxt(String title, String content) async {
     final output = await getTemporaryDirectory();
-    final file = File("${output.path}/note.pdf");
-    await file.writeAsBytes(await pdf.save());
+    final file = File("${output.path}/note.txt");
+    await file.writeAsString('Title: $title\n\nContent:\n$content');
     return file;
   }
 }

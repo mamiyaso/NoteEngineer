@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:note_engineer/screens/note_edit_screen.dart';
 import 'package:note_engineer/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -10,7 +9,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final SupabaseService supabaseService = SupabaseService();
-
   final _supabaseClient = Supabase.instance.client;
   List<Map<String, dynamic>> notes = [];
   bool _isGrid = false;
@@ -55,6 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _onNoteSaved() {
+    fetchNotes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fetchNotes();
                     });
                   },
-                  child: Text(_showFavorites ? 'Tümü' : 'Favoriler'),
+                  child: Text(_showFavorites ? 'Favoriler' : 'Tümü'),
                 ),
                 DropdownButton<String>(
                   value: _sortType,
@@ -148,7 +150,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/note_edit');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NoteEditScreen(
+                onSave: _onNoteSaved,
+              ),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
@@ -156,79 +165,97 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildGridNotes() {
-    return GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(notes.length, (index) {
-        final note = notes[index];
-        return Card(
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      NoteEditScreen(
-                        onSave: fetchNotes,
-                        noteId: note['id'],
-                        initialTitle: note['title'],
-                        initialContent: note['content'],
-                      ),
-                ),
-              );
-            },
-            onLongPress: () => _showNoteOptions(note),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Text(
-                    note['title'],
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(note['content']),
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
-
-  Widget _buildListNotes() {
-    return ListView.builder(
-      itemCount: notes.length,
-      itemBuilder: (context, index) {
-        final note = notes[index];
-        return ListTile(
-          title: Text(note['title']),
-          subtitle: Text(note['content']),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    NoteEditScreen(
-                      onSave: fetchNotes,
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchNotes();
+      },
+      child: GridView.count(
+        crossAxisCount: 2,
+        children: List.generate(notes.length, (index) {
+          final note = notes[index];
+          final firstLine = note['content'].split('\n').first;
+          return Card(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NoteEditScreen(
+                      onSave: _onNoteSaved,
                       noteId: note['id'],
                       initialTitle: note['title'],
                       initialContent: note['content'],
                     ),
+                  ),
+                );
+              },
+              onLongPress: () => _showNoteOptions(note),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      note['title'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(firstLine),
+                  ),
+                ],
               ),
-            );
-          },
-          onLongPress: () => _showNoteOptions(note),
-        );
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildListNotes() {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchNotes();
       },
+      child: ListView.separated(
+        itemCount: notes.length,
+        separatorBuilder: (context, index) => Divider(),
+        itemBuilder: (context, index) {
+          final note = notes[index];
+          final firstLine = note['content'].split('\n').first;
+          final createdAt = DateTime.parse(note['created_at']);
+          final formattedDate =
+              "${createdAt.hour}:${createdAt.minute} ${createdAt.day}/${createdAt.month}/${createdAt.year}";
+
+          return ListTile(
+            title: Text(note['title'].toString().isNotEmpty ? note['title'] : 'Başlıksız'),
+            subtitle: Text(firstLine),
+            trailing: Text(
+              formattedDate,
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NoteEditScreen(
+                    onSave: fetchNotes,
+                    noteId: note['id'],
+                    initialTitle: note['title'],
+                    initialContent: note['content'],
+                  ),
+                ),
+              );
+            },
+            onLongPress: () => _showNoteOptions(note),
+          );
+        },
+      ),
     );
   }
 
@@ -247,19 +274,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   : 'Favorilere Ekle'),
               onTap: () async {
                 Navigator.pop(context);
-                await supabaseService.toggleFavorite(
-                    note['id'], !note['is_favorite']);
-                fetchNotes(); // Favori değiştirildiğinde notları yeniden getir
+                _toggleFavorite(note['id'], !note['is_favorite']);
               },
             ),
             ListTile(
-              leading: Icon(Icons.picture_as_pdf),
-              title: Text('PDF Olarak Kaydet'),
-              onTap: () async {
+              leading: Icon(Icons.edit),
+              title: Text('Düzenle'),
+              onTap: () {
                 Navigator.pop(context);
-                final file = await supabaseService.createPdf(
-                    note['title'], note['content']);
-                // PDF dosyasını açma veya paylaşma kodu buraya gelecek
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NoteEditScreen(
+                      onSave: fetchNotes,
+                      noteId: note['id'],
+                      initialTitle: note['title'],
+                      initialContent: note['content'],
+                      initialUpdatedAt: note['updated_at'],
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -267,9 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text('Sil'),
               onTap: () async {
                 Navigator.pop(context);
-                await supabaseService.deleteNote(
-                    note['id']); // Notu çöp kutusuna taşı
-                fetchNotes(); // Çöp kutusuna taşındığında notları yeniden getir
+                _deleteNote(note['id']);
               },
             ),
           ],

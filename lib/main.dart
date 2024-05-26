@@ -3,6 +3,7 @@ import 'package:note_engineer/screens/deleted_notes_screen.dart';
 import 'package:note_engineer/screens/home_screen.dart';
 import 'package:note_engineer/screens/note_edit_screen.dart';
 import 'package:note_engineer/screens/settings_screen.dart';
+import 'package:note_engineer/screens/reset_password_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login_screen.dart';
@@ -27,14 +28,28 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
+        '/': (context) => AuthCheck(),
         '/home': (context) => HomeScreen(),
         '/settings': (context) => SettingsScreen(),
         '/login': (context) => LoginScreen(),
         '/deleted_notes': (context) => DeletedNotesScreen(),
-        '/note_edit': (context) => NoteEditScreen(onSave: (){} ),
+        '/note_edit': (context) => NoteEditScreen(onSave: (){}),
+        '/reset_password': (context) => ResetPasswordScreen(),
       },
     );
+  }
+}
+
+class AuthCheck extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session != null) {
+      return HomeScreen();
+    } else {
+      return LoginScreen();
+    }
   }
 }
