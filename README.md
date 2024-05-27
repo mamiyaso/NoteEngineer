@@ -61,6 +61,11 @@ Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gerekli
 * **Google Keep API:** Not defteri uygulamasına Google Keep'in özelliklerini entegre etme, örneğin not oluşturma, düzenleme, silme, etiket ekleme, hatırlatıcı ayarlama gibi. 
 * **PDF dışa aktarma:**  Kullanıcıların notlarını ve hesaplamalarını PDF formatında dışa aktarabilme.
 * **OCR taraması:** Fotoğraflarda bulunan metinleri OCR (Optik Karakter Tanıma) kullanarak aranabilir hale getirme.
+* 
+**Gelecek sürümlerde düzeltilecek özellikler:**
+* Favorilere ekle butonu: favorilere eklemiyor.
+* Değiştirilme tarihi: not görüntülenip bir değişiklik yapılmasa dahi güncellenmniş sayılıyor.
+* Matematiksel semboller satırı butonları: sadece matematiksel ifade hesaplama alanına giriş yapıyor.
 
 **Bu özellikler, uygulamaya eklendikçe, GitHub Releases sayfasında güncellemeler yayınlanacaktır.**
 
