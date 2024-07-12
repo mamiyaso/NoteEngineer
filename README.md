@@ -11,6 +11,21 @@ Note Engineer, Flutter ile geliştirilmiş ve Supabase ile desteklenen, kullanı
 -   **Çöp Kutusu:** Yanlışlıkla not mu sildiniz? Endişelenmeyin! Çöp kutusundan kurtarın.
 -   **Metin Dosyasına Kaydetme:** Notlarınızı paylaşmak veya yedeklemek için düz metin dosyasına aktarın.
 -   **Güvenli ve Senkronize Edilmiş:** Notlarınız, verilerinizin güvenli ve her cihazdan erişilebilir olmasını sağlayan Supabase'de güvenli bir şekilde saklanır.
+-   **Tema Seçenekleri:** Açık tema, koyu tema veya kendi özel temanızı seçin. Vurgu rengi, arkaplan rengi ve metin rengini özelleştirin.
+-   **Kategorilenmiş Hesap Makineleri:** Hesap makinelerine kolayca erişin ve farklı kategoriler (Tarih & Zaman, Dönüşümler, Matematik) arasında gezinin.
+    - **Tarih & Zaman:**
+        - Yaş Hesaplayıcı
+        - Tarih Farkı Hesaplayıcı
+    - **Dönüşümler:**
+        - Zaman Hesaplayıcı
+        - Alan Hesaplayıcı
+        - Uzunluk Hesaplayıcı
+        - Kütle Hesaplayıcı
+        - Sıcaklık Hesaplayıcı
+        - Hacim Hesaplayıcı
+        - Sayı Sistemi Dönüştürücü
+    - **Matematik:**
+        - Basit Hesap Makinesi
 
 **Kurulum**
 
@@ -30,17 +45,18 @@ Note Engineer'i indirmek ve kullanmaya başlamak için aşağıdaki adımları i
 **Ek Bilgiler:**
 
 -   **APK dosyasını kurmak için cihazınızın bilinmeyen kaynaklardan uygulama yüklemesine izin vermeniz gerekebilir.**
--   **Windows için uygulamayı çalıştırmak için cihazınızda Flutter SDK yüklü olmalıdır.**
+-   **EXE dosyasını kurmak için cihazınızın bilinmeyen kaynaklardan uygulama yüklemesine izin vermeniz gerekebilir.**
 
 **Gelecek Destek:**
 
 Yakında macOS, iOS, Linux ve web platformları için destek eklenecek. Bu platformlar için kurulum talimatları da GitHub Releases sayfasına eklenecektir.
 
-Note Engineer'i kullanmaya başladıktan sonra sorularınız varsa lütfen GitHub sayfamızda veya topluluk forumumuzda bize ulaşmaktan çekinmeyin.
+  
+Note Engineer'i kullanmaya başladıktan sonra sorularınız varsa lütfen GitHub sayfamızda bize ulaşmaktan çekinmeyin.
 
 **Bağımlılıklar**
 
-Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gereklidir:
+Uygulamanın geliştirilmesinde aşağıdaki bağımlılıklar kullanılmıştır:
 
 * **flutter:**
 * **math_expressions:** 
@@ -64,6 +80,9 @@ Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gerekli
 * **Google Keep API:** Not defteri uygulamasına Google Keep'in özelliklerini entegre etme, örneğin not oluşturma, düzenleme, silme, etiket ekleme, hatırlatıcı ayarlama gibi. 
 * **PDF dışa aktarma:**  Kullanıcıların notlarını ve hesaplamalarını PDF formatında dışa aktarabilme.
 * **OCR taraması:** Fotoğraflarda bulunan metinleri OCR (Optik Karakter Tanıma) kullanarak aranabilir hale getirme.
+* **E2EE Şifreleme:** Gelecekte, kullanıcı notlarının uçtan uca şifrelenmesi planlanmaktadır, böylece verileriniz her zaman güvende olur.
+* **Daha Fazla Giriş Yapma Seçeneği:** Kullanıcıların Google, Facebook vb. gibi diğer platformlar aracılığıyla giriş yapmalarına olanak sağlamak için daha fazla giriş seçeneği eklenecektir.
+* **Daha Fazla Dil Desteği:** Uygulamanın daha geniş bir kitleye ulaşması için daha fazla dil seçeneği eklenecektir.
 
 
 **Bu özellikler, uygulamaya eklendikçe, GitHub Releases sayfasında güncellemeler yayınlanacaktır.**
@@ -72,6 +91,4 @@ Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gerekli
 
 Note Engineer, MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için LICENSE dosyasına bakın.
 
-**Görseller:**
-
-![Screenshot_2024-05-27-06-03-13-274_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/c25a4c46-e54d-475b-8a11-a0555c2d7153)![Screenshot_2024-05-27-06-03-59-378_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/61c9fe08-47de-4b1b-9fd0-77e915b6db78)![Screenshot_2024-05-27-06-04-37-172_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/4089165f-9b11-4872-a0b3-206763dae056)![Screenshot_2024-05-27-06-06-00-981_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/5177bdb3-ab77-47bb-af45-3c7925430374)![Screenshot_2024-05-27-06-06-08-401_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/8428f177-55cb-4844-8abc-1d5cd488b061)![Screenshot_2024-05-27-06-06-39-748_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/7de68056-f256-446a-aa32-2a6736cee0e2)![Screenshot_2024-05-27-06-08-42-689_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/cc8ad7be-0690-4c55-acf7-55c9d84851bd)![Screenshot_2024-05-27-06-09-16-100_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/4e15065f-6b9f-4d7d-a345-9b879836f9c6)![Screenshot_2024-05-27-06-09-20-291_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/354177de-0e08-4862-ae66-b826ce433df6)![Screenshot_2024-05-27-06-10-02-083_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/c36bae05-fbdf-440a-b25e-ebf35a9b4d03)![Screenshot_2024-05-27-06-10-07-721_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/bfa97c5c-3239-4173-9531-c44ad55d422b)![Screenshot_2024-05-27-06-10-11-132_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/6eb6d153-091f-488b-b780-f66c68897eb8)![Screenshot_2024-05-27-06-10-17-875_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/945af70b-cb40-4de3-b7fb-a09e8daa2b9d)![Screenshot_2024-05-27-06-10-38-330_com example note_app_flutter](https://github.com/mamiyaso/NoteEngineer/assets/124776073/9517a7a7-9c78-4481-8ea1-d500c9724508)
+![ezgif com-apng-maker 1](https://github.com/user-attachments/assets/759eb43b-a863-4d86-bf38-1fb29532d603)
