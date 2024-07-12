@@ -22,7 +22,7 @@ Note Engineer'i indirmek ve kullanmaya başlamak için aşağıdaki adımları i
 
 **Windows için Kurulum:**
 
-1.  **GitHub Releases sayfasına gidin:** [GitHub Releases sayfasının bağlantısını ekleyin]
+1.  **GitHub Releases sayfasına gidin:** https://github.com/mamiyaso/NoteEngineer/releases
 2.  **Zip dosyasını indirin:** Windows için Zip dosyasını indirin.
 3.  **Zip dosyasını ayıklayın:** İndirilen Zip dosyasını bilgisayarınızda bir yere ayıklayın.
 4.  **Flutter.exe dosyasını çalıştırın:** Ayıklanan klasördeki "flutter.exe" dosyasına çift tıklayın.
@@ -46,12 +46,15 @@ Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gerekli
 * **math_expressions:** 
 * **supabase_flutter:** 
 * **http:** 
-* **path_provider:** 
+* **path_provider:**
+* **provider:**
+* **flutter_colorpicker:**
 * **file_picker:** 
 * **flutter_dotenv:** 
 * **intl:** 
 * **shared_preferences:** 
-* **cupertino_icons:** 
+* **cupertino_icons:**
+* **flutter_launcher_icons:**
 
 **Gelecek sürümlerde uygulamaya eklenecek özellikler:**
 
@@ -61,11 +64,7 @@ Uygulamanın düzgün çalışması için aşağıdaki bağımlılıklar gerekli
 * **Google Keep API:** Not defteri uygulamasına Google Keep'in özelliklerini entegre etme, örneğin not oluşturma, düzenleme, silme, etiket ekleme, hatırlatıcı ayarlama gibi. 
 * **PDF dışa aktarma:**  Kullanıcıların notlarını ve hesaplamalarını PDF formatında dışa aktarabilme.
 * **OCR taraması:** Fotoğraflarda bulunan metinleri OCR (Optik Karakter Tanıma) kullanarak aranabilir hale getirme.
-* 
-**Gelecek sürümlerde düzeltilecek özellikler:**
-* Favorilere ekle butonu: favorilere eklemiyor.
-* Değiştirilme tarihi: not görüntülenip bir değişiklik yapılmasa dahi güncellenmniş sayılıyor.
-* Matematiksel semboller satırı butonları: sadece matematiksel ifade hesaplama alanına giriş yapıyor.
+
 
 **Bu özellikler, uygulamaya eklendikçe, GitHub Releases sayfasında güncellemeler yayınlanacaktır.**
 
