@@ -91,4 +91,4 @@ Uygulamanın geliştirilmesinde aşağıdaki bağımlılıklar kullanılmıştı
 
 Note Engineer, MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için LICENSE dosyasına bakın.
 
-![ezgif com-apng-maker 1](https://github.com/user-attachments/assets/759eb43b-a863-4d86-bf38-1fb29532d603)
+![ezgif com-apng-maker-1 1](https://github.com/user-attachments/assets/5fb8b0bd-b3b8-44d8-ab15-c038e4c69c2c)
