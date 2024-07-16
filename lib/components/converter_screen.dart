@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'keypad.dart';
@@ -170,22 +170,24 @@ class ConverterScreenState extends State<ConverterScreen> {
           builder: (BuildContext context, ScrollController scrollController) {
             final themeProvider = Provider.of<ThemeProvider>(context);
             return Container(
-              color: themeProvider.backgroundColor, // Use theme background color
+              color: themeProvider.backgroundColor,
               child: ListView(
                 controller: scrollController,
                 children: <Widget>[
                   ListTile(
                     title: Text(
-                        widget.title == 'VKE Hesaplayıcı'
-                            ? 'Birim Seçin'
-                            : 'Sistem Seçin',
+                        widget.title == 'BMI Calculator'
+                            ? 'unitSelection'.tr()
+                            : 'systemSelection'.tr(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: themeProvider.textColor)), // Use theme text color
+                        style: TextStyle(color: themeProvider.textColor)
+                    ),
                   ),
                   ...widget.unitPickerItems.map((Map<String, String> unit) {
                     return ListTile(
                       title: Text(unit['name']!,
-                          style: TextStyle(color: themeProvider.textColor)), // Use theme text color
+                          style: TextStyle(color: themeProvider.textColor)
+                      ),
                       onTap: () {
                         setState(() {
                           if (isInput) {
@@ -212,12 +214,12 @@ class ConverterScreenState extends State<ConverterScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    if (widget.title == 'Sayı Sistemi Dönüştürücü') {
+    if (widget.title == 'numeralSystemConverter.title'.tr()) {
       return Scaffold(
         backgroundColor: themeProvider.backgroundColor,
         appBar: AppBar(
-          title: Text('Sayı Sistemi Dönüştürücü', style: TextStyle(color: themeProvider.textColor)),
-          backgroundColor: themeProvider.accentColor, // Use theme accent color
+          title: Text('numeralSystemConverter.title'.tr(), style: TextStyle(color: themeProvider.textColor)),
+          backgroundColor: themeProvider.accentColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -235,7 +237,7 @@ class ConverterScreenState extends State<ConverterScreen> {
                       autofocus: true,
                       focusNode: _inputFocusNode,
                       controller: _inputController,
-                      style: TextStyle(fontSize: 24, color: themeProvider.textColor), // Use theme text color
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
                       textAlign: TextAlign.right,
                       enableInteractiveSelection:  Platform.isWindows,
                       showCursor: false,
@@ -256,7 +258,7 @@ class ConverterScreenState extends State<ConverterScreen> {
                     child: TextField(
                       focusNode: _outputFocusNode,
                       controller: _outputController,
-                      style: TextStyle(fontSize: 24, color: themeProvider.textColor), // Use theme text color
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
                       textAlign: TextAlign.right,
                       enableInteractiveSelection:  Platform.isWindows,
                       showCursor: false,
@@ -282,8 +284,8 @@ class ConverterScreenState extends State<ConverterScreen> {
       return Scaffold(
         backgroundColor: themeProvider.backgroundColor,
         appBar: AppBar(
-          title: Text(widget.title, style: TextStyle(color: themeProvider.textColor)), // Use theme text color
-          backgroundColor: themeProvider.accentColor, // Use theme accent color
+          title: Text(widget.title, style: TextStyle(color: themeProvider.textColor)),
+          backgroundColor: themeProvider.accentColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -301,7 +303,7 @@ class ConverterScreenState extends State<ConverterScreen> {
                       autofocus: true,
                       focusNode: _inputFocusNode,
                       controller: _inputController,
-                      style: TextStyle(fontSize: 24, color: themeProvider.textColor), // Use theme text color
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
                       textAlign: TextAlign.right,
                       enableInteractiveSelection:  Platform.isWindows,
                       showCursor: false,
@@ -323,7 +325,7 @@ class ConverterScreenState extends State<ConverterScreen> {
                     child: TextField(
                       focusNode: _outputFocusNode,
                       controller: _outputController,
-                      style: TextStyle(fontSize: 24, color: themeProvider.textColor), // Use theme text color
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
                       textAlign: TextAlign.right,
                       enableInteractiveSelection:  Platform.isWindows,
                       showCursor: false,
@@ -356,13 +358,14 @@ class ConverterScreenState extends State<ConverterScreen> {
         padding: const EdgeInsets.all(4.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            foregroundColor: themeProvider.textColor, // Use theme text color
-            backgroundColor: themeProvider.backgroundColor, // Use theme background color
+            foregroundColor: themeProvider.textColor,
+            backgroundColor: themeProvider.backgroundColor,
             padding: const EdgeInsets.symmetric(vertical: 24),
           ),
           onPressed: onPressed,
           child: Text(text,
-              style: TextStyle(fontSize: 24, color: themeProvider.accentColor)), // Use theme accent color
+              style: TextStyle(fontSize: 24, color: themeProvider.accentColor)
+          ),
         ),
       ),
     );

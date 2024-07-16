@@ -1,0 +1,269 @@
+{
+  "unitSelection": "Select Unit",
+  "systemSelection": "Select System",
+  "numberSystemConverter": "Number System Converter",
+  "invalidInput": "Invalid Input",
+  "invalidUnitConversion": "Invalid unit conversion",
+
+  "ageCalculatorScreen":
+  {
+    "title": "Age Calculator",
+    "selectBirthDate": "Select Birth Date",
+    "selectCurrentDate": "Select Current Date",
+    "agePrefix": "Age: {age}",
+    "age": "{0} years, {1} months, {2} days old"
+  },
+
+  "areaConverter":
+  {
+    "title": "Area Converter",
+    "squareKilometer": "Square Kilometer",
+    "squareMeter": "Square Meter",
+    "squareDecimeter": "Square Decimeter",
+    "squareCentimeter": "Square Centimeter",
+    "squareMillimeter": "Square Millimeter",
+    "squareMicrometer": "Square Micrometer",
+    "squareMile": "Square Mile",
+    "squareYard": "Square Yard",
+    "squareFoot": "Square Foot",
+    "squareInch": "Square Inch"
+  },
+  "basicCalculator":
+  {
+    "title": "Basic Calculator",
+    "history": "History",
+    "divideByZeroError": "Error: Division by zero",
+    "invalidFormatError": "Invalid expression format: {0}",
+    "rangeError": "Calculation result is too large or too small.",
+    "invalidArgumentError": "Invalid argument: {0}",
+    "invalidStateError": "Invalid calculator state: {0}",
+    "unknownError": "An unknown error occurred: {0}",
+    "error": "Error"
+  },
+
+  "calculatorScreen":
+  {
+    "title": "Calculator",
+    "ageCalculator": "Age Calculator",
+    "dateDifferenceCalculator": "Date Difference Calculator",
+    "timeCalculator": "Time Calculator",
+    "lengthCalculator": "Length Calculator",
+    "massCalculator": "Mass Calculator",
+    "temperatureCalculator": "Temperature Calculator",
+    "volumeCalculator": "Volume Calculator",
+    "numeralSystemCalculator": "Numeral System Calculator",
+    "areaCalculator": "Area Calculator",
+    "basicCalculator": "Basic Calculator"
+  },
+
+  "dateDifferenceCalculator":
+  {
+    "title": "Date Difference Calculator",
+    "selectStartDate": "Select Start Date",
+    "selectEndDate": "Select End Date",
+    "differencePrefix": "Difference: {difference}",
+    "difference": "{0} days"
+  },
+
+  "deletedNotesScreen":
+  {
+    "title": "Deleted Notes",
+    "restoreAllTitle": "Restore All",
+    "restoreAllConfirmation": "Are you sure you want to restore all deleted notes?",
+    "deleteAllTitle": "Delete All",
+    "deleteAllConfirmation": "Are you sure you want to permanently delete all deleted notes?",
+    "permanentlyDeleteTitle": "Permanently Delete Note",
+    "permanentlyDeleteConfirmation": "Are you sure you want to permanently delete this note?",
+    "no": "No",
+    "yes": "Yes"
+  },
+
+  "historyScreen":
+  {
+    "title": "History",
+    "clearHistory": "Clear History?",
+    "clearHistoryConfirmation": "Are you sure you want to clear the history?",
+    "no": "No",
+    "yes": "Yes"
+  },
+
+  "homeScreen":
+  {
+    "title": "Notes",
+    "searchNotes": "Search in notes...",
+    "settings": "Settings",
+    "allNotes": "All",
+    "favorites": "Favorites",
+    "creationDate": "Creation Date",
+    "modificationDate": "Modification Date",
+    "byTitle": "By Title",
+    "untitled": "Untitled",
+    "errorOccured": "An erro occured!"
+  },
+  "noteOptions":
+  {
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+
+  "lengthConverter":
+  {
+    "title": "Length Converter",
+    "kilometer": "Kilometer",
+    "meter": "Meter",
+    "decimeter": "Decimeter",
+    "centimeter": "Centimeter",
+    "millimeter": "Millimeter",
+    "micrometer": "Micrometer",
+    "mile": "Mile",
+    "yard": "Yard",
+    "foot": "Foot",
+    "inch": "Inch"
+  },
+
+  "loginScreen":
+  {
+    "login": "Log In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirmation": "Password (Repeat)",
+    "noAccount": "Don't have an account? Sign up",
+    "haveAccount": "Already have an account? Log in",
+    "invalidEmailOrPassword": "Invalid email or password!",
+    "userNotFound": "User not found!",
+    "loginFailed": "Login failed. Please try again later.",
+    "passwordsNotMatch": "Passwords don't match!",
+    "registrationSuccessful": "Registration successful! Please log in.",
+    "registrationFailed": "Registration failed!"
+  },
+
+  "massConverter":
+  {
+    "title": "Mass Converter",
+    "micrograms": "Micrograms",
+    "milligram": "Milligram",
+    "gram": "Gram",
+    "kilogram": "Kilogram",
+    "tonne": "Tonne",
+    "pound": "Pound",
+    "ounce": "Ounce"
+  },
+
+  "noteEditScreen":
+  {
+    "title": "Title",
+    "noDate": "No Date",
+    "delete": "Delete",
+    "save": "Save",
+    "calculate": "Calculate",
+    "saveAsTxt": "Save as TXT",
+    "enterTitle": "Enter Title",
+    "enterNotes": "Enter your notes here...",
+    "enterMathExpression": "Enter mathematical expression here...",
+    "invalidMathExpression": "Invalid mathematical expression!",
+    "noteSaved": "Note saved as {filename}",
+    "errorSavingFile": "An error occurred while saving the file: {error}"
+  },
+
+  "numeralSystemConverter":
+  {
+    "title": "Numeral System Converter",
+    "binary": "Binary (2)",
+    "octal": "Octal (8)",
+    "decimal": "Decimal (10)",
+    "hexadecimal": "Hexadecimal (16)"
+  },
+
+  "resetPasswordScreen":
+  {
+    "title": "Change Password",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "changePassword": "Change Password",
+    "passwordsDoNotMatch": "Passwords do not match!",
+    "userSessionNotFound": "User session not found!",
+    "passwordChangedSuccessfully": "Password changed successfully!",
+    "invalidOldPassword": "Invalid old password!",
+    "errorChangingPassword": "An error occurred while changing the password. Please try again later."
+  },
+
+  "settingsScreen":
+  {
+    "title": "Settings",
+    "accountSettings": "Account Settings",
+    "changePassword": "Change Password",
+    "logout": "Logout",
+    "trash": "Trash",
+    "deletedNotes": "Deleted Notes",
+    "fileSaveLocation": "File Save Location",
+    "notSelected": "Not Selected",
+    "themeSettings": "Theme Settings",
+    "selectTheme": "Select Theme",
+    "language": "Language",
+    "selectLanguage": "Select Language"
+  },
+
+  "temperatureConverter": {
+    "title": "Temperature Converter",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kelvin": "Kelvin"
+  },
+
+  "themeSettingsScreen":
+  {
+    "title": "Theme Settings",
+    "themeMode": "Theme Mode",
+    "lightTheme": "Light Theme",
+    "darkTheme": "Dark Theme",
+    "createYourTheme": "Create Your Theme",
+    "accentColor": "Accent Color",
+    "selectAccentColor": "Select Accent Color",
+    "backgroundColor": "Background Color",
+    "selectBackgroundColor": "Select Background Color",
+    "textColor": "Text Color",
+    "selectTextColor": "Select Text Color",
+    "select": "Select"
+  },
+
+  "timeConverter":
+  {
+    "title": "Time Converter",
+    "year": "Year",
+    "week": "Week",
+    "day": "Day",
+    "hour": "Hour",
+    "minute": "Minute",
+    "second": "Second",
+    "millisecond": "Millisecond",
+    "microsecond": "Microsecond"
+  },
+
+  "volumeConverter":
+  {
+    "title": "Volume Converter",
+    "cubicKilometer": "Cubic Kilometer",
+    "cubicMeter": "Cubic Meter",
+    "cubicDecimeter": "Cubic Decimeter",
+    "cubicCentimeter": "Cubic Centimeter",
+    "cubicMillimeter": "Cubic Millimeter",
+    "hectoliters": "Hectoliters",
+    "liter": "Liter",
+    "deciliter": "Deciliter",
+    "centiliter": "Centiliter",
+    "milliliter": "Milliliter",
+    "cubicFoot": "Cubic Foot",
+    "cubicInch": "Cubic Inch",
+    "cubicYard": "Cubic Yard",
+    "acreFoot": "Acre-Foot"
+  },
+
+  "encryptionService":
+  {
+    "encryptionKeyNotFound": "Encryption key not found!"
+  }
+}

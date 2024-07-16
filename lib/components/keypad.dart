@@ -22,39 +22,58 @@ class KeyPad extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              _buildButton('7', onPressed: () => onKeyPressed('7'), themeProvider: themeProvider),
-              _buildButton('8', onPressed: () => onKeyPressed('8'), themeProvider: themeProvider),
-              _buildButton('9', onPressed: () => onKeyPressed('9'), themeProvider: themeProvider),
+              _buildButton('7',
+                  onPressed: () => onKeyPressed('7'),
+                  themeProvider: themeProvider),
+              _buildButton('8',
+                  onPressed: () => onKeyPressed('8'),
+                  themeProvider: themeProvider),
+              _buildButton('9',
+                  onPressed: () => onKeyPressed('9'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton('4', onPressed: () => onKeyPressed('4'), themeProvider: themeProvider),
-              _buildButton('5', onPressed: () => onKeyPressed('5'), themeProvider: themeProvider),
-              _buildButton('6', onPressed: () => onKeyPressed('6'), themeProvider: themeProvider),
+              _buildButton('4',
+                  onPressed: () => onKeyPressed('4'),
+                  themeProvider: themeProvider),
+              _buildButton('5',
+                  onPressed: () => onKeyPressed('5'),
+                  themeProvider: themeProvider),
+              _buildButton('6',
+                  onPressed: () => onKeyPressed('6'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton('1', onPressed: () => onKeyPressed('1'), themeProvider: themeProvider),
-              _buildButton('2', onPressed: () => onKeyPressed('2'), themeProvider: themeProvider),
-              _buildButton('3', onPressed: () => onKeyPressed('3'), themeProvider: themeProvider),
+              _buildButton('1',
+                  onPressed: () => onKeyPressed('1'),
+                  themeProvider: themeProvider),
+              _buildButton('2',
+                  onPressed: () => onKeyPressed('2'),
+                  themeProvider: themeProvider),
+              _buildButton('3',
+                  onPressed: () => onKeyPressed('3'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton(
-                  '.',
+              _buildButton('.',
                   onPressed: () => onKeyPressed('.'),
                   alwaysEnabled: true,
                   themeProvider: themeProvider),
-              _buildButton('0', onPressed: () => onKeyPressed('0'), themeProvider: themeProvider),
+              _buildButton('0',
+                  onPressed: () => onKeyPressed('0'),
+                  themeProvider: themeProvider),
               // Delete Button
               Expanded(
                 child: Padding(
@@ -66,7 +85,8 @@ class KeyPad extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 24),
                     ),
                     onPressed: () => onDeletePressed(context),
-                    child: Icon(Icons.backspace_outlined, color: themeProvider.accentColor),
+                    child: Icon(Icons.backspace_outlined,
+                        color: themeProvider.accentColor),
                   ),
                 ),
               ),
@@ -79,9 +99,9 @@ class KeyPad extends StatelessWidget {
 
   Widget _buildButton(String text,
       {required Function() onPressed,
-        required ThemeProvider themeProvider,
-        double flex = 1,
-        bool alwaysEnabled = false}) {
+      required ThemeProvider themeProvider,
+      double flex = 1,
+      bool alwaysEnabled = false}) {
     bool isEnabled = alwaysEnabled ||
         (int.tryParse(text) != null &&
             int.parse(text) <
@@ -100,9 +120,7 @@ class KeyPad extends StatelessWidget {
             backgroundColor: themeProvider.backgroundColor,
             padding: const EdgeInsets.symmetric(vertical: 24),
           ),
-          onPressed: isEnabled
-              ? onPressed
-              : null,
+          onPressed: isEnabled ? onPressed : null,
           child: Text(
             text,
             style: TextStyle(
@@ -119,7 +137,7 @@ class KeyPad extends StatelessWidget {
 class HexKeyPad extends StatelessWidget {
   final Function(String) onKeyPressed;
   final Function(BuildContext) onDeletePressed;
-  final String unit; // inputUnit veya outputUnit olarak kullanacağız
+  final String unit;
 
   const HexKeyPad({
     super.key,
@@ -136,9 +154,15 @@ class HexKeyPad extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              _buildButton('D', onPressed: () => onKeyPressed('D'), themeProvider: themeProvider),
-              _buildButton('E', onPressed: () => onKeyPressed('E'), themeProvider: themeProvider),
-              _buildButton('F', onPressed: () => onKeyPressed('F'), themeProvider: themeProvider),
+              _buildButton('D',
+                  onPressed: () => onKeyPressed('D'),
+                  themeProvider: themeProvider),
+              _buildButton('E',
+                  onPressed: () => onKeyPressed('E'),
+                  themeProvider: themeProvider),
+              _buildButton('F',
+                  onPressed: () => onKeyPressed('F'),
+                  themeProvider: themeProvider),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -149,7 +173,9 @@ class HexKeyPad extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 24),
                     ),
                     onPressed: () => onDeletePressed(context),
-                    child: Icon(Icons.backspace_outlined, color: themeProvider.accentColor),
+                    child: Icon(Icons.backspace_outlined,
+                        color: themeProvider.accentColor
+                    ),
                   ),
                 ),
               ),
@@ -159,44 +185,71 @@ class HexKeyPad extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              _buildButton('9', onPressed: () => onKeyPressed('9'), themeProvider: themeProvider),
-              _buildButton('A', onPressed: () => onKeyPressed('A'), themeProvider: themeProvider),
-              _buildButton('B', onPressed: () => onKeyPressed('B'), themeProvider: themeProvider),
-              _buildButton('C', onPressed: () => onKeyPressed('C'), themeProvider: themeProvider),
+              _buildButton('9',
+                  onPressed: () => onKeyPressed('9'),
+                  themeProvider: themeProvider),
+              _buildButton('A',
+                  onPressed: () => onKeyPressed('A'),
+                  themeProvider: themeProvider),
+              _buildButton('B',
+                  onPressed: () => onKeyPressed('B'),
+                  themeProvider: themeProvider),
+              _buildButton('C',
+                  onPressed: () => onKeyPressed('C'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton('5', onPressed: () => onKeyPressed('5'), themeProvider: themeProvider),
-              _buildButton('6', onPressed: () => onKeyPressed('6'), themeProvider: themeProvider),
-              _buildButton('7', onPressed: () => onKeyPressed('7'), themeProvider: themeProvider),
-              _buildButton('8', onPressed: () => onKeyPressed('8'), themeProvider: themeProvider),
+              _buildButton('5',
+                  onPressed: () => onKeyPressed('5'),
+                  themeProvider: themeProvider),
+              _buildButton('6',
+                  onPressed: () => onKeyPressed('6'),
+                  themeProvider: themeProvider),
+              _buildButton('7',
+                  onPressed: () => onKeyPressed('7'),
+                  themeProvider: themeProvider),
+              _buildButton('8',
+                  onPressed: () => onKeyPressed('8'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton('1', onPressed: () => onKeyPressed('1'), themeProvider: themeProvider),
-              _buildButton('2', onPressed: () => onKeyPressed('2'), themeProvider: themeProvider),
-              _buildButton('3', onPressed: () => onKeyPressed('3'), themeProvider: themeProvider),
-              _buildButton('4', onPressed: () => onKeyPressed('4'), themeProvider: themeProvider),
+              _buildButton('1',
+                  onPressed: () => onKeyPressed('1'),
+                  themeProvider: themeProvider),
+              _buildButton('2',
+                  onPressed: () => onKeyPressed('2'),
+                  themeProvider: themeProvider),
+              _buildButton('3',
+                  onPressed: () => onKeyPressed('3'),
+                  themeProvider: themeProvider),
+              _buildButton('4',
+                  onPressed: () => onKeyPressed('4'),
+                  themeProvider: themeProvider),
             ],
           ),
         ),
         Expanded(
           child: Row(
             children: [
-              _buildButton('', flex: 1, onPressed: () {}, themeProvider: themeProvider),
-              _buildButton('0', onPressed: () => onKeyPressed('0'), themeProvider: themeProvider),
-              _buildButton(
-                  '.',
+              _buildButton('',
+                  flex: 1, onPressed: () {}, themeProvider: themeProvider),
+              _buildButton('0',
+                  onPressed: () => onKeyPressed('0'),
+                  themeProvider: themeProvider),
+              _buildButton('.',
                   onPressed: () => onKeyPressed('.'),
                   alwaysEnabled: true,
                   themeProvider: themeProvider),
-              _buildButton('', flex: 1, onPressed: () {}, themeProvider: themeProvider),
+              _buildButton('',
+                  flex: 1, onPressed: () {}, themeProvider: themeProvider),
             ],
           ),
         ),
@@ -206,18 +259,16 @@ class HexKeyPad extends StatelessWidget {
 
   Widget _buildButton(String text,
       {required Function() onPressed,
-        required ThemeProvider themeProvider,
-        double flex = 1,
-        bool alwaysEnabled = false}) {
+      required ThemeProvider themeProvider,
+      double flex = 1,
+      bool alwaysEnabled = false}) {
     bool isEnabled = alwaysEnabled ||
         (unit == '16' ||
             (unit == '10' && int.tryParse(text) != null) ||
             (unit == '8' &&
                 int.tryParse(text) != null &&
                 int.parse(text) < 8) ||
-            (unit == '2' &&
-                int.tryParse(text) != null &&
-                int.parse(text) < 2));
+            (unit == '2' && int.tryParse(text) != null && int.parse(text) < 2));
 
     return Expanded(
       flex: flex.toInt(),
@@ -229,9 +280,7 @@ class HexKeyPad extends StatelessWidget {
             backgroundColor: themeProvider.backgroundColor,
             padding: const EdgeInsets.symmetric(vertical: 24),
           ),
-          onPressed: isEnabled
-              ? onPressed
-              : null,
+          onPressed: isEnabled ? onPressed : null,
           child: Text(
             text,
             style: TextStyle(

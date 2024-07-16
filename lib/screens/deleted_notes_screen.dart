@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:note_engineer/note_encryption.dart';
 import 'package:note_engineer/services/supabase_service.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,6 +29,16 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
   Future<void> fetchDeletedNotes() async {
     final userId = _supabaseClient.auth.currentUser!.id;
     deletedNotes = await supabaseService.getDeletedNotes(userId);
+
+    for (var i = 0; i < deletedNotes.length; i++) {
+      deletedNotes[i]['title'] = deletedNotes[i]['title'] != null
+          ? await EncryptionService.decryptData(deletedNotes[i]['title'])
+          : '';
+
+      deletedNotes[i]['content'] = deletedNotes[i]['content'] != null
+          ? await EncryptionService.decryptData(deletedNotes[i]['content'])
+          : '';
+    }
 
     setState(() {
       isLoading = false;
@@ -62,7 +74,7 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Silinen Notlar',
+          'deletedNotesScreen.title'.tr(),
           style: TextStyle(color: themeProvider.textColor),
         ),
         backgroundColor: themeProvider.accentColor,
@@ -73,17 +85,26 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
               final confirm = await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Tümünü Geri Yükle', style: TextStyle(color: themeProvider.textColor)),
-                  content: Text('Tüm silinen notları geri yüklemek istediğinize emin misiniz?', style: TextStyle(color: themeProvider.textColor)),
+                  title: Text('deletedNotesScreen.restoreAllTitle'.tr(),
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
+                  content: Text(
+                      'deletedNotesScreen.restoreAllConfirmation'.tr(),
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
                   backgroundColor: themeProvider.backgroundColor,
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('Hayır', style: TextStyle(color: themeProvider.textColor)),
+                      child: Text('no'.tr(),
+                          style: TextStyle(color: themeProvider.textColor)
+                      ),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
-                      child: Text('Evet', style: TextStyle(color: themeProvider.textColor)),
+                      child: Text('yes'.tr(),
+                          style: TextStyle(color: themeProvider.textColor)
+                      ),
                     ),
                   ],
                 ),
@@ -99,17 +120,26 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
               final confirm = await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Tümünü Sil', style: TextStyle(color: themeProvider.textColor)),
-                  content: Text('Tüm silinen notları kalıcı olarak silmek istediğinize emin misiniz?', style: TextStyle(color: themeProvider.textColor)),
+                  title: Text('deletedNotesScreen.deleteAllTitle'.tr(),
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
+                  content: Text(
+                      'deletedNotesScreen.deleteAllConfirmation'.tr(),
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
                   backgroundColor: themeProvider.backgroundColor,
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('Hayır', style: TextStyle(color: themeProvider.textColor)),
+                      child: Text('no'.tr(),
+                          style: TextStyle(color: themeProvider.textColor)
+                      ),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
-                      child: Text('Evet', style: TextStyle(color: themeProvider.textColor)),
+                      child: Text('yes'.tr(),
+                          style: TextStyle(color: themeProvider.textColor)
+                      ),
                     ),
                   ],
                 ),
@@ -128,8 +158,14 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
         itemBuilder: (context, index) {
           final note = deletedNotes[index];
           return ListTile(
-            title: Text(note['title'], style: TextStyle(color: themeProvider.textColor)),
-            subtitle: Text(note['content'], style: TextStyle(color: themeProvider.textColor)),
+            title: Text(
+                note['title'] != null ? note['title'] : '',
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            subtitle: Text(
+                note['content'] != null ? note['content'] : '',
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -145,17 +181,39 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
                     final confirm = await showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text('Notu Kalıcı Olarak Sil', style: TextStyle(color: themeProvider.textColor)),
-                        content: Text('Bu notu kalıcı olarak silmek istediğinize emin misiniz?', style: TextStyle(color: themeProvider.textColor)),
+                        title: Text(
+                            'deletedNotesScreen.permanentlyDeleteTitle'
+                                .tr(),
+                            style: TextStyle(
+                                color: themeProvider.textColor
+                            )
+                        ),
+                        content: Text(
+                            'deletedNotesScreen.permanentlyDeleteConfirmation'
+                                .tr(),
+                            style: TextStyle(
+                                color: themeProvider.textColor
+                            )
+                        ),
                         backgroundColor: themeProvider.backgroundColor,
                         actions: [
                           TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: Text('Hayır', style: TextStyle(color: themeProvider.textColor)),
+                            onPressed: () =>
+                                Navigator.of(context).pop(false),
+                            child: Text('no'.tr(),
+                                style: TextStyle(
+                                    color: themeProvider.textColor
+                                )
+                            ),
                           ),
                           TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: Text('Evet', style: TextStyle(color: themeProvider.textColor)),
+                            onPressed: () =>
+                                Navigator.of(context).pop(true),
+                            child: Text('yes'.tr(),
+                                style: TextStyle(
+                                    color: themeProvider.textColor
+                                )
+                            ),
                           ),
                         ],
                       ),

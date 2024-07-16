@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:note_engineer/screens/history_screen.dart';
 import 'package:note_engineer/theme_provider.dart';
@@ -20,6 +22,46 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
   bool _lastNumberContainsDecimal() {
     List<String> parts = _expression.split(RegExp(r'[+\-x÷%]'));
     return parts.isNotEmpty && parts.last.contains('.');
+  }
+
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onKey(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      final logicalKey = event.logicalKey;
+      String? value;
+
+      if (logicalKey == LogicalKeyboardKey.enter) {
+        value = '=';
+      } else if (logicalKey == LogicalKeyboardKey.backspace) {
+        value = 'sil';
+      } else if (logicalKey == LogicalKeyboardKey.delete) {
+        value = 'AC';
+      } else if (logicalKey == LogicalKeyboardKey.numpadAdd) {
+        value = '+';
+      } else if (logicalKey == LogicalKeyboardKey.numpadSubtract) {
+        value = '-';
+      } else if (logicalKey == LogicalKeyboardKey.numpadMultiply) {
+        value = 'x';
+      } else if (logicalKey == LogicalKeyboardKey.numpadDivide) {
+        value = '÷';
+      } else if (logicalKey == LogicalKeyboardKey.period ||
+          logicalKey == LogicalKeyboardKey.numpadDecimal) {
+        value = '.';
+      } else if (logicalKey.keyLabel.isNotEmpty && RegExp(r'^[0-9]$').hasMatch(logicalKey.keyLabel)) {
+        value = logicalKey.keyLabel;
+      }
+
+      if (value != null) {
+        _onKeyPressed(value);
+      }
+    }
   }
 
   void _onKeyPressed(String value) {
@@ -90,7 +132,7 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
 
       if (resultDouble == double.infinity ||
           resultDouble == double.negativeInfinity) {
-        _showErrorSnackbar("Sıfıra bölme hatası");
+        _showErrorSnackBar("basicCalculator.divideByZeroError".tr());
       } else {
         if (resultDouble == resultDouble.floor()) {
           _display = resultDouble.toInt().toString();
@@ -102,16 +144,16 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
         _expression = _display;
       }
     } on FormatException catch (e) {
-      _showErrorSnackbar("Geçersiz ifade formatı: ${e.message}");
+      _showErrorSnackBar("basicCalculator.invalidFormatError".tr(args: [e.message]));
     } on RangeError {
-      _showErrorSnackbar("İşlem sonucu çok büyük veya çok küçük.");
+      _showErrorSnackBar("basicCalculator.rangeError".tr());
     } on ArgumentError catch (e) {
-      _showErrorSnackbar("Geçersiz argüman: ${e.message}");
+      _showErrorSnackBar("basicCalculator.invalidArgumentError".tr(args: [e.message]));
     } on StateError catch (e) {
-      _showErrorSnackbar("Hesap makinesi durumu geçersiz: ${e.message}");
+      _showErrorSnackBar("basicCalculator.invalidStateError".tr(args: [e.message]));
     } catch (e) {
-      _showErrorSnackbar("Bilinmeyen bir hata oluştu: ${e.toString()}");
-      _display = "Hata";
+      _showErrorSnackBar("basicCalculator.unknownError".tr(args: [e.toString()]));
+      _display = "basicCalculator.error".tr();
     }
   }
 
@@ -123,7 +165,7 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
         value == '%';
   }
 
-  void _showErrorSnackbar(String message) {
+  void _showErrorSnackBar(String message) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -138,7 +180,7 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
       required ThemeProvider themeProvider,
       double flex = 1}) {
     Widget buttonChild;
-    if (text == 'Geçmiş') {
+    if (text == 'basicCalculator.history'.tr()) {
       buttonChild =
           Icon(Icons.history, color: themeProvider.accentColor);
     } else if (text == 'sil') {
@@ -184,7 +226,7 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
         Expanded(
           child: Row(
             children: [
-              _buildButton('Geçmiş', onPressed: () {
+              _buildButton('basicCalculator.history'.tr(), onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -290,15 +332,20 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
   Widget build(BuildContext context) {
     final themeProvider =
         Provider.of<ThemeProvider>(context);
-    return Scaffold(
+    return KeyboardListener(
+        focusNode: _focusNode,
+        onKeyEvent: _onKey,
+        autofocus: true,
+        child: Scaffold(
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         backgroundColor: themeProvider.accentColor,
         title: Text(
-          'Basit Hesap Makinesi',
+          'basicCalculator.title'.tr(),
           style: TextStyle(
               fontSize: 24,
-              color: themeProvider.textColor),
+              color: themeProvider.textColor
+          ),
         ),
       ),
       body: Padding(
@@ -315,7 +362,8 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
                   _display,
                   style: TextStyle(
                       fontSize: 48,
-                      color: themeProvider.textColor),
+                      color: themeProvider.textColor
+                  ),
                 ),
               ),
             ),
@@ -326,6 +374,7 @@ class BasicCalculatorScreenState extends State<BasicCalculatorScreen> {
           ],
         ),
       ),
+        ),
     );
   }
 }

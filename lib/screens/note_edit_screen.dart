@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:note_engineer/note_encryption.dart';
 import 'package:note_engineer/theme_provider.dart';
@@ -8,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NoteEditScreen extends StatefulWidget {
   final Function onSave;
@@ -17,7 +17,12 @@ class NoteEditScreen extends StatefulWidget {
   final String? initialUpdatedAt;
 
   const NoteEditScreen(
-      {super.key, required this.onSave, this.noteId, this.initialTitle, this.initialContent, this.initialUpdatedAt});
+      {super.key,
+        required this.onSave,
+        this.noteId,
+        this.initialTitle,
+        this.initialContent,
+        this.initialUpdatedAt});
 
   @override
   NoteEditScreenState createState() => NoteEditScreenState();
@@ -64,7 +69,6 @@ class NoteEditScreenState extends State<NoteEditScreen> {
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
 
-    // Eğer başlık ve içerik boşsa, direkt olarak yollayın
     if (title.isEmpty && content.isEmpty) {
       widget.onSave();
       if (mounted) {
@@ -72,12 +76,17 @@ class NoteEditScreenState extends State<NoteEditScreen> {
       }
       return;
     }
-    final encryptedTitle = await EncryptionService.encryptData(title);
-    final encryptedContent = await EncryptionService.encryptData(content);
+    final encryptedTitle = title.isNotEmpty
+        ? await EncryptionService.encryptData(title)
+        : await null;
+    final encryptedContent = content.isNotEmpty
+        ? await EncryptionService.encryptData(content)
+        : await null;
 
-    bool isUpdated = (widget.initialTitle != null && _titleController.text != widget.initialTitle!) ||
-        (widget.initialContent != null && _contentController.text != widget.initialContent!);
-
+    bool isUpdated = (widget.initialTitle != null &&
+        _titleController.text != widget.initialTitle!) ||
+        (widget.initialContent != null &&
+            _contentController.text != widget.initialContent!);
 
     if (widget.noteId == null) {
       await _supabaseClient.from('notes').insert({
@@ -172,9 +181,9 @@ class NoteEditScreenState extends State<NoteEditScreen> {
               isValid = false;
           }
 
-          String message = isValid ? 'Doğru' : 'Yanlış';
+          String message = isValid ? 'True' : 'False';
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('İfade: $message')),
+            SnackBar(content: Text('Expression: $message')),
           );
 
           setState(() {
@@ -183,12 +192,18 @@ class NoteEditScreenState extends State<NoteEditScreen> {
           });
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
+            SnackBar(
+                content:
+                Text('noteEditScreen.invalidMathExpression'.tr())
+            ),
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
+          SnackBar(
+              content:
+              Text('noteEditScreen.invalidMathExpression'.tr())
+          ),
         );
       }
     } else {
@@ -204,7 +219,10 @@ class NoteEditScreenState extends State<NoteEditScreen> {
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Geçersiz matematiksel ifade!')),
+          SnackBar(
+              content:
+              Text('noteEditScreen.invalidMathExpression'.tr())
+          ),
         );
       }
     }
@@ -247,9 +265,11 @@ class NoteEditScreenState extends State<NoteEditScreen> {
       final File file = File(filePath);
       await file.writeAsString(content);
 
-      _showSnackBar('Notunuz $fileName olarak kaydedildi!');
+      _showSnackBar(
+          'noteEditScreen.noteSaved'.tr(args: [fileName]));
     } catch (e) {
-      _showSnackBar('Dosya kaydedilirken hata oluştu: $e');
+      _showSnackBar(
+          'noteEditScreen.errorSavingFile'.tr(args: [e.toString()]));
     }
   }
 
@@ -267,7 +287,7 @@ class NoteEditScreenState extends State<NoteEditScreen> {
     _selectedDate = DateTime.now();
     String formattedDate = _selectedDate != null
         ? DateFormat('HH:mm dd.MM.yyyy').format(_selectedDate!)
-        : 'Tarih Yok';
+        : 'noteEditScreen.noDate'.tr();
     return Scaffold(
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
@@ -293,19 +313,27 @@ class NoteEditScreenState extends State<NoteEditScreen> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'delete',
-                child: Text('Sil', style: TextStyle(color: themeProvider.textColor)),
+                child: Text('noteEditScreen.delete'.tr(),
+                    style: TextStyle(color: themeProvider.textColor)
+                ),
               ),
               PopupMenuItem(
                 value: 'save',
-                child: Text('Kaydet', style: TextStyle(color: themeProvider.textColor)),
+                child: Text('noteEditScreen.save'.tr(),
+                    style: TextStyle(color: themeProvider.textColor)
+                ),
               ),
               PopupMenuItem(
                 value: 'calculate',
-                child: Text('Hesapla', style: TextStyle(color: themeProvider.textColor)),
+                child: Text('noteEditScreen.calculate'.tr(),
+                    style: TextStyle(color: themeProvider.textColor)
+                ),
               ),
               PopupMenuItem(
                 value: 'save-txt',
-                child: Text('TXT Olarak Kaydet', style: TextStyle(color: themeProvider.textColor)),
+                child: Text('noteEditScreen.saveAsTxt'.tr(),
+                    style: TextStyle(color: themeProvider.textColor)
+                ),
               ),
             ],
           ),
@@ -323,10 +351,12 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
                     controller: _titleController,
-                    decoration: const InputDecoration(
-                      hintText: 'Başlık',
+                    decoration: InputDecoration(
+                      hintText: 'noteEditScreen.enterTitle'.tr(),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      hintStyle: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold
+                      ),
                     ),
                     style: TextStyle(
                       fontSize: 24,
@@ -352,18 +382,24 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                       focusNode: _mathFocusNode,
                       controller: _mathController,
                       decoration: InputDecoration(
-                        hintText: 'Matematiksel ifadeyi buraya girin...',
+                        hintText:
+                        'noteEditScreen.enterMathExpression'.tr(),
                         border: InputBorder.none,
                         isCollapsed: true,
                         contentPadding: const EdgeInsets.all(16.0),
                         hintStyle: TextStyle(color: themeProvider.textColor),
                       ),
                       keyboardType: TextInputType.multiline,
-                      style: TextStyle(fontSize: 16.0, color: themeProvider.textColor),
+                      style: TextStyle(
+                          fontSize: 16.0, color: themeProvider.textColor
+                      ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.calculate, color: themeProvider.accentColor),
+                    icon: Icon(Icons.calculate,
+                        color: themeProvider.accentColor
+                    )
+                    ,
                     onPressed: _calculateMathExpression,
                   ),
                 ],
@@ -383,7 +419,7 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                   focusNode: _contentFocusNode,
                   controller: _contentController,
                   decoration: InputDecoration(
-                    hintText: 'Notlarınızı buraya yazın...',
+                    hintText: 'noteEditScreen.enterNotes'.tr(),
                     border: InputBorder.none,
                     isCollapsed: true,
                     contentPadding: const EdgeInsets.all(16.0),
@@ -391,10 +427,16 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                   ),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
-                  style: TextStyle(fontSize: 16.0, color: themeProvider.textColor),
+                  style: TextStyle(
+                      fontSize: 16.0, color: themeProvider.textColor
+                  ),
                   textAlignVertical: TextAlignVertical.top,
                   expands: true,
-                  buildCounter: (context, {required currentLength, required isFocused, maxLength}) => null,
+                  buildCounter: (context,
+                      {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                  null,
                 ),
               ),
             ),
@@ -452,14 +494,16 @@ class NoteEditScreenState extends State<NoteEditScreen> {
   }
 
   void _insertAtCursor(String text) {
-    final TextEditingController controller =
-    _contentFocusNode.hasFocus ? _contentController : _mathController;
+    final TextEditingController controller = _contentFocusNode.hasFocus
+        ? _contentController
+        : _mathController;
     final textValue = controller.text;
     final cursorPosition = controller.selection.baseOffset;
     final newText =
     textValue.replaceRange(cursorPosition, cursorPosition, text);
     controller.text = newText;
     controller.selection = TextSelection.fromPosition(
-        TextPosition(offset: cursorPosition + text.length));
+        TextPosition(offset: cursorPosition + text.length)
+    );
   }
 }

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:note_engineer/components/converter_screen.dart';
 import 'package:note_engineer/components/unit_converter.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NumeralSystemCalculatorScreen extends StatelessWidget {
   const NumeralSystemCalculatorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const ConverterScreen(
-      title: 'Sayı Sistemi Dönüştürücü',
+    return ConverterScreen(
+      title: 'numeralSystemConverter.title'.tr(),
       initialInputUnit: '10',
       initialOutputUnit: '2',
       unitPickerItems: [
-        {'name': '2\'lik (İkili)', 'value': '2'},
-        {'name': '8\'lik (Sekizlik)', 'value': '8'},
-        {'name': '10\'luk (Onluk)', 'value': '10'},
-        {'name': '16\'lık (Onaltılık)', 'value': '16'},
+        {'name': 'numeralSystemConverter.binary'.tr(), 'value': '2'},
+        {'name': 'numeralSystemConverter.octal'.tr(), 'value': '8'},
+        {'name': 'numeralSystemConverter.decimal'.tr(), 'value': '10'},
+        {'name': 'numeralSystemConverter.hexadecimal'.tr(), 'value': '16'},
       ],
       converter: UnitConverter.convertNumeralSystem,
     );

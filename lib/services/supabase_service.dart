@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:note_engineer/note_encryption.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -58,10 +59,11 @@ class SupabaseService {
   }
 
   Future<PostgrestResponse> addToFavorites(String noteId) async {
-    return await _client
+    final response = await _client
         .from('notes')
         .update({'is_favorite': true})
         .eq('id', noteId);
+    return response;
   }
 
   Future<PostgrestResponse> removeFromFavorites(String noteId) async {
@@ -71,14 +73,23 @@ class SupabaseService {
         .eq('id', noteId);
   }
 
-
   Future<List<Map<String, dynamic>>> searchNotes(String userId, String query) async {
     final response = await _client.from('notes').select('*')
         .eq('user_id', userId)
-        .eq('is_trashed', false)
-        .or('title.ilike.%$query%,content.ilike.%$query%');
-    return List<Map<String, dynamic>>.from(response);
+        .eq('is_trashed', false);
+    List<Map<String, dynamic>> notes = List<Map<String, dynamic>>.from(response);
+
+    for (var note in notes) {
+      note['title'] = note['title'] != null ? await EncryptionService.decryptData(note['title']) : '';
+      note['content'] = note['content'] != null ? await EncryptionService.decryptData(note['content']) : '';
+    }
+
+    return notes.where((note) =>
+    (note['title'] != null && note['title'].toLowerCase().contains(query.toLowerCase())) ||
+        (note['content'] != null && note['content'].toLowerCase().contains(query.toLowerCase()))
+    ).toList();
   }
+
   List<Map<String, dynamic>> sortNotes(List<Map<String, dynamic>> notes, String sortType, bool isAscending) {
     if (sortType == 'created_at') {
       notes.sort((a, b) => isAscending

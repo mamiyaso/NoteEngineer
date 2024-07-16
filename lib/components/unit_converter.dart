@@ -1,56 +1,58 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class UnitConverter {
   static String convertNumeralSystem(String value, String fromUnit, String toUnit) {
     int decimalValue;
     try {
       decimalValue = int.parse(value, radix: int.parse(fromUnit));
     } catch (e) {
-      return "Geçersiz Giriş";
+      return "invalidInput".tr();
     }
     return decimalValue.toRadixString(int.parse(toUnit)).toUpperCase();
   }
 
   static double convertArea(double value, String fromUnit, String toUnit) {
-    double lengthInMeters = fromUnit == 'km²'
+    double lengthInMeters = fromUnit == 'km2'
         ? value * 1000000
-        : fromUnit == 'm²'
+        : fromUnit == 'm2'
         ? value
-        : fromUnit == 'dm²'
+        : fromUnit == 'dm2'
         ? value / 100
-        : fromUnit == 'cm²'
+        : fromUnit == 'cm2'
         ? value / 10000
-        : fromUnit == 'mm²'
+        : fromUnit == 'mm2'
         ? value / 1000000
-        : fromUnit == 'μm²'
+        : fromUnit == 'μm2'
         ? value / 1000000000000
-        : fromUnit == 'mi²'
+        : fromUnit == 'mi2'
         ? value * 2589988.11
-        : fromUnit == 'yd²'
+        : fromUnit == 'yd2'
         ? value * 0.836127
-        : fromUnit == 'ft²'
+        : fromUnit == 'ft2'
         ? value * 0.092903
-        : fromUnit == 'in²'
+        : fromUnit == 'in2'
         ? value * 0.00064516
         : value;
 
-    return toUnit == 'km²'
+    return toUnit == 'km2'
         ? lengthInMeters / 1000000
-        : toUnit == 'm²'
+        : toUnit == 'm2'
         ? lengthInMeters
-        : toUnit == 'dm²'
+        : toUnit == 'dm2'
         ? lengthInMeters * 100
-        : toUnit == 'cm²'
+        : toUnit == 'cm2'
         ? lengthInMeters * 10000
-        : toUnit == 'mm²'
+        : toUnit == 'mm2'
         ? lengthInMeters * 1000000
-        : toUnit == 'μm²'
+        : toUnit == 'μm2'
         ? lengthInMeters * 1000000000000
-        : toUnit == 'mi²'
+        : toUnit == 'mi2'
         ? lengthInMeters / 2589988.11
-        : toUnit == 'yd²'
+        : toUnit == 'yd2'
         ? lengthInMeters / 0.836127
-        : toUnit == 'ft²'
+        : toUnit == 'ft2'
         ? lengthInMeters / 0.092903
-        : toUnit == 'in²'
+        : toUnit == 'in2'
         ? lengthInMeters / 0.00064516
         : lengthInMeters;
   }
@@ -102,15 +104,15 @@ class UnitConverter {
   }
 
   static double convertVolume(double value, String fromUnit, String toUnit) {
-    double volumeInMetersCubed = fromUnit == 'km³'
+    double volumeInMetersCubed = fromUnit == 'km3'
         ? value * 1e9
-        : fromUnit == 'm³'
+        : fromUnit == 'm3'
         ? value
-        : fromUnit == 'dm³'
+        : fromUnit == 'dm3'
         ? value / 1e3
-        : fromUnit == 'cm³'
+        : fromUnit == 'cm3'
         ? value / 1e6
-        : fromUnit == 'mm³'
+        : fromUnit == 'mm3'
         ? value / 1e9
         : fromUnit == 'hl'
         ? value / 1e2
@@ -122,25 +124,25 @@ class UnitConverter {
         ? value / 1e5
         : fromUnit == 'mL'
         ? value / 1e6
-        : fromUnit == 'ft³'
+        : fromUnit == 'ft3'
         ? value * 0.0283168
-        : fromUnit == 'in³'
+        : fromUnit == 'in3'
         ? value * 0.0000163871
-        : fromUnit == 'yd³'
+        : fromUnit == 'yd3'
         ? value * 0.764555
         : fromUnit == 'acre-ft'
         ? value * 1233.48
         : value;
 
-    return toUnit == 'km³'
+    return toUnit == 'km3'
         ? volumeInMetersCubed / 1e9
-        : toUnit == 'm³'
+        : toUnit == 'm3'
         ? volumeInMetersCubed
-        : toUnit == 'dm³'
+        : toUnit == 'dm3'
         ? volumeInMetersCubed * 1e3
-        : toUnit == 'cm³'
+        : toUnit == 'cm3'
         ? volumeInMetersCubed * 1e6
-        : toUnit == 'mm³'
+        : toUnit == 'mm3'
         ? volumeInMetersCubed * 1e9
         : toUnit == 'hl'
         ? volumeInMetersCubed * 1e2
@@ -152,11 +154,11 @@ class UnitConverter {
         ? volumeInMetersCubed * 1e5
         : toUnit == 'mL'
         ? volumeInMetersCubed * 1e6
-        : toUnit == 'ft³'
+        : toUnit == 'ft3'
         ? volumeInMetersCubed / 0.0283168
-        : toUnit == 'in³'
+        : toUnit == 'in3'
         ? volumeInMetersCubed / 0.0000163871
-        : toUnit == 'yd³'
+        : toUnit == 'yd3'
         ? volumeInMetersCubed / 0.764555
         : toUnit == 'acre-ft'
         ? volumeInMetersCubed / 1233.48
@@ -172,7 +174,7 @@ class UnitConverter {
         ? value * 60
         : fromUnit == 'h'
         ? value * 3600
-        : fromUnit == 'g'
+        : fromUnit == 'd'
         ? value * 86400
         : fromUnit == 'wk'
         ? value * 604800
@@ -188,7 +190,7 @@ class UnitConverter {
         ? timeInSeconds / 60
         : toUnit == 'h'
         ? timeInSeconds / 3600
-        : toUnit == 'g'
+        : toUnit == 'd'
         ? timeInSeconds / 86400
         : toUnit == 'wk'
         ? timeInSeconds / 604800
@@ -206,7 +208,7 @@ class UnitConverter {
         ? value
         : fromUnit == 'kg'
         ? value * 1000
-        : fromUnit == 'ton'
+        : fromUnit == 't'
         ? value * 1000000
         : fromUnit == 'lb'
         ? value * 453.592
@@ -233,7 +235,7 @@ class UnitConverter {
 
   static double convertTemperature(double value, String fromUnit, String toUnit) {
     if (fromUnit == toUnit) {
-      return value; // Aynı birimse değeri değiştirme
+      return value;
     }
 
     if (fromUnit == 'C') {
@@ -256,6 +258,6 @@ class UnitConverter {
       }
     }
 
-    throw ArgumentError('Geçersiz birim dönüşümü: $fromUnit - $toUnit');
+    throw ArgumentError('invalidUnitConversion'.tr);
   }
 }

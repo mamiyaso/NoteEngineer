@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -41,7 +42,7 @@ class EncryptionService {
   static Future<String> decryptData(String encryptedData) async {
     final encryptionKey = await SecureStorage.readKey('encryptionKey');
     if (encryptionKey == null) {
-      throw Exception('Şifreleme anahtarı bulunamadı!');
+      throw Exception('encryptionService.encryptionKeyNotFound'.tr());
     }
 
     final key = encrypt.Key(base64.decode(encryptionKey));

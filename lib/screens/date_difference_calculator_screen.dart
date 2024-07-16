@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -101,7 +101,7 @@ class DateDifferenceCalculatorScreenState
     if (_startDate != null && _endDate != null) {
       final difference = _endDate!.difference(_startDate!);
       setState(() {
-        _difference = '${difference.inDays} gün';
+        _difference = 'dateDifferenceCalculator.difference'.tr(args: ['${difference.inDays}']);
       });
     }
   }
@@ -113,7 +113,7 @@ class DateDifferenceCalculatorScreenState
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Tarih Farkı Hesaplama',
+          'dateDifferenceCalculator.title'.tr(),
           style: TextStyle(color: themeProvider.textColor),
         ),
         backgroundColor: themeProvider.accentColor,
@@ -125,7 +125,7 @@ class DateDifferenceCalculatorScreenState
             ListTile(
               title: Text(
                 _startDate == null
-                    ? 'Başlangıç Tarihini Seç'
+                    ? 'dateDifferenceCalculator.selectStartDate'.tr()
                     : DateFormat.yMMMd().format(_startDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
@@ -135,7 +135,7 @@ class DateDifferenceCalculatorScreenState
             ListTile(
               title: Text(
                 _endDate == null
-                    ? 'Bitiş Tarihini Seç'
+                    ? 'dateDifferenceCalculator.selectEndDate'.tr()
                     : DateFormat.yMMMd().format(_endDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
@@ -144,7 +144,7 @@ class DateDifferenceCalculatorScreenState
             ),
             const SizedBox(height: 20),
             Text(
-              'Fark: $_difference',
+              'dateDifferenceCalculator.differencePrefix'.tr(namedArgs: {'difference': _difference}),
               style: TextStyle(fontSize: 24, color: themeProvider.textColor),
             ),
           ],

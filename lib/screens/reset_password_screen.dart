@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -19,7 +20,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Future<void> _changePassword() async {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
-    void _showSnackbar(String message) {
+    void _showSnackBar(String message) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
@@ -29,13 +30,13 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     }
 
     if (_newPasswordController.text != _confirmPasswordController.text) {
-      _showSnackbar('Girilen parolalar uyuşmuyor!');
+      _showSnackBar('resetPasswordScreen.passwordsDoNotMatch'.tr());
       return;
     }
 
     final user = _supabaseClient.auth.currentUser;
     if (user == null) {
-      _showSnackbar('Kullanıcı oturumu bulunamadı!');
+      _showSnackBar('resetPasswordScreen.userSessionNotFound'.tr());
       return;
     }
 
@@ -43,16 +44,16 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
       await _supabaseClient.auth.updateUser(UserAttributes(
         password: _newPasswordController.text,
       ));
-      _showSnackbar('Parola başarıyla değiştirildi!');
+      _showSnackBar('resetPasswordScreen.passwordChangedSuccessfully'.tr());
       Navigator.pushReplacementNamed(context, '/settings');
     } on AuthException catch (e) {
       if (e.message.contains('Invalid old password')) {
-        _showSnackbar('Geçersiz eski parola!');
+        _showSnackBar('resetPasswordScreen.invalidOldPassword'.tr());
       } else {
-        _showSnackbar('Parola değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+        _showSnackBar('resetPasswordScreen.errorChangingPassword'.tr());
       }
     } catch (e) {
-      _showSnackbar('Hata: $e');
+      _showSnackBar('Error: $e');
     }
   }
 
@@ -62,7 +63,9 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Scaffold(
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
-        title: Text('Parola Değiştir', style: TextStyle(color: themeProvider.textColor)),
+        title: Text('resetPasswordScreen.title'.tr(),
+            style: TextStyle(color: themeProvider.textColor)
+        ),
         backgroundColor: themeProvider.accentColor,
       ),
       body: Padding(
@@ -72,19 +75,28 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           children: <Widget>[
             TextField(
               controller: _oldPasswordController,
-              decoration: InputDecoration(labelText: 'Eski Parola', labelStyle: TextStyle(color: themeProvider.textColor)),
+              decoration: InputDecoration(
+                  labelText: 'resetPasswordScreen.oldPassword'.tr(),
+                  labelStyle: TextStyle(color: themeProvider.textColor)
+              ),
               obscureText: true,
               style: TextStyle(color: themeProvider.textColor),
             ),
             TextField(
               controller: _newPasswordController,
-              decoration: InputDecoration(labelText: 'Yeni Parola', labelStyle: TextStyle(color: themeProvider.textColor)),
+              decoration: InputDecoration(
+                  labelText: 'resetPasswordScreen.newPassword'.tr(),
+                  labelStyle: TextStyle(color: themeProvider.textColor)
+              ),
               obscureText: true,
               style: TextStyle(color: themeProvider.textColor),
             ),
             TextField(
               controller: _confirmPasswordController,
-              decoration: InputDecoration(labelText: 'Yeni Parola (Tekrar)', labelStyle: TextStyle(color: themeProvider.textColor)),
+              decoration: InputDecoration(
+                  labelText: 'resetPasswordScreen.confirmPassword'.tr(),
+                  labelStyle: TextStyle(color: themeProvider.textColor)
+              ),
               obscureText: true,
               style: TextStyle(color: themeProvider.textColor),
             ),
@@ -95,7 +107,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 backgroundColor: themeProvider.accentColor,
                 foregroundColor: themeProvider.textColor,
               ),
-              child: const Text('Parolayı Değiştir'),
+              child: Text('resetPasswordScreen.changePassword'.tr()),
             ),
           ],
         ),

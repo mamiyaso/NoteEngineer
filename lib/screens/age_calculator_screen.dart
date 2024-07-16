@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -111,7 +111,7 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
       }
 
       setState(() {
-        _age = '$years yıl, $months ay, $days gün';
+        _age = 'ageCalculatorScreen.age'.tr(args: ['$years', '$months', '$days']);
       });
     }
   }
@@ -123,7 +123,7 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Yaş Hesaplama',
+          'ageCalculatorScreen.title'.tr(),
           style: TextStyle(color: themeProvider.textColor),
         ),
         backgroundColor: themeProvider.accentColor,
@@ -135,7 +135,7 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
             ListTile(
               title: Text(
                 _birthDate == null
-                    ? 'Doğum Tarihini Seç'
+                    ? 'ageCalculatorScreen.selectBirthDate'.tr()
                     : DateFormat.yMMMd().format(_birthDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
@@ -145,7 +145,7 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
             ListTile(
               title: Text(
                 _currentDate == null
-                    ? 'Güncel Tarihi Seç'
+                    ? 'ageCalculatorScreen.selectCurrentDate'.tr()
                     : DateFormat.yMMMd().format(_currentDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
@@ -154,7 +154,7 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Yaş: $_age',
+              'ageCalculatorScreen.agePrefix'.tr(namedArgs: {'age': _age}),
               style: TextStyle(fontSize: 24, color: themeProvider.textColor),
             ),
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ThemeSettingsScreen extends StatefulWidget {
   const ThemeSettingsScreen({super.key});
@@ -18,7 +19,7 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
     return Scaffold(
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
-        title: const Text('Tema Ayarları'),
+        title: Text('themeSettingsScreen.title'.tr()),
         backgroundColor: themeProvider.accentColor,
       ),
       body: Padding(
@@ -27,7 +28,7 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Tema Modu',
+              'themeSettingsScreen.themeMode'.tr(),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -36,21 +37,20 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
             ),
             RadioListTile<ThemeMode>(
               title: Text(
-                'Açık Tema',
+                'themeSettingsScreen.lightTheme'.tr(),
                 style: TextStyle(color: themeProvider.textColor),
               ),
               value: ThemeMode.light,
               groupValue: themeProvider.themeMode,
               onChanged: (value) {
                 themeProvider.setThemeMode(value!);
-                // Açık tema seçildiğinde varsayılan renkleri ayarla
                 themeProvider.setBackgroundColor(Colors.white);
                 themeProvider.setTextColor(Colors.black);
               },
             ),
             RadioListTile<ThemeMode>(
               title: Text(
-                'Koyu Tema',
+                'themeSettingsScreen.darkTheme'.tr(),
                 style: TextStyle(color: themeProvider.textColor),
               ),
               value: ThemeMode.dark,
@@ -63,7 +63,7 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
             ),
             RadioListTile<ThemeMode>(
               title: Text(
-                'Kendi Temanı Oluştur',
+                'themeSettingsScreen.createYourTheme'.tr(),
                 style: TextStyle(color: themeProvider.textColor),
               ),
               value: ThemeMode.system,
@@ -73,38 +73,48 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
               },
             ),
             const SizedBox(height: 20),
-
             Text(
-              'Vurgu Rengi',
+              'themeSettingsScreen.accentColor'.tr(),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: themeProvider.textColor,
               ),
             ),
-            _buildColorPicker(themeProvider, themeProvider.accentColor, 'Vurgu Rengi Seç', themeProvider.setAccentColor),
-
+            _buildColorPicker(
+                themeProvider,
+                themeProvider.accentColor,
+                'themeSettingsScreen.selectAccentColor'.tr(),
+                themeProvider.setAccentColor),
             if (themeProvider.themeMode == ThemeMode.system) ...[
               const SizedBox(height: 20),
               Text(
-                'Arkaplan Rengi',
+                'themeSettingsScreen.backgroundColor'.tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: themeProvider.textColor,
                 ),
               ),
-              _buildColorPicker(themeProvider, themeProvider.backgroundColor, 'Arkaplan Rengi Seç', themeProvider.setBackgroundColor),
+              _buildColorPicker(
+                  themeProvider,
+                  themeProvider.backgroundColor,
+                  'themeSettingsScreen.selectBackgroundColor'.tr(),
+                  themeProvider.setBackgroundColor),
               const SizedBox(height: 20),
               Text(
-                'Metin Rengi',
+                'themeSettingsScreen.textColor'.tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: themeProvider.textColor,
                 ),
               ),
-              _buildColorPicker(themeProvider, themeProvider.textColor, 'Metin Rengi Seç', themeProvider.setTextColor),
+              _buildColorPicker(
+                  themeProvider,
+                  themeProvider.textColor,
+                  'themeSettingsScreen.selectTextColor'.tr(),
+                  themeProvider.setTextColor),
             ],
           ],
         ),
@@ -112,7 +122,8 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
     );
   }
 
-  Widget _buildColorPicker(ThemeProvider themeProvider, Color currentColor, String title, Function(Color) onColorChanged) {
+  Widget _buildColorPicker(ThemeProvider themeProvider, Color currentColor,
+      String title, Function(Color) onColorChanged) {
     return ListTile(
       title: Text(
         title,
@@ -139,7 +150,7 @@ class _ThemeSettingsScreenState extends State<ThemeSettingsScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Seç'),
+                child: Text('themeSettingsScreen.select'.tr()),
               ),
             ],
           ),

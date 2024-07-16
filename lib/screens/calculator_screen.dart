@@ -11,6 +11,7 @@ import 'package:note_engineer/screens/mass_calculator_screen.dart';
 import 'package:note_engineer/screens/volume_calculator.dart';
 import 'package:note_engineer/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CalculatorScreen extends StatelessWidget {
   const CalculatorScreen({super.key});
@@ -21,101 +22,143 @@ class CalculatorScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
-        title: Text('Hesaplayıcı', style: TextStyle(color: themeProvider.textColor)),
+        title: Text('calculatorScreen.title'.tr(),
+            style: TextStyle(color: themeProvider.textColor)
+        ),
         backgroundColor: themeProvider.accentColor,
       ),
       body: ListView(
         children: [
           ListTile(
-            title: Text('Yaş Hesaplama', style: TextStyle(color: themeProvider.textColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AgeCalculatorScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Tarih Farkı Hesaplama', style: TextStyle(color: themeProvider.textColor)),
+            title: Text('calculatorScreen.ageCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const DateDifferenceCalculatorScreen()),
+                    builder: (context) => const AgeCalculatorScreen()
+                ),
               );
             },
           ),
           ListTile(
-            title: Text('Zaman Hesaplama', style: TextStyle(color: themeProvider.textColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const TimeCalculatorScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Uzunluk Hesaplama', style: TextStyle(color: themeProvider.textColor)),
+            title: Text('calculatorScreen.dateDifferenceCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const LengthCalculatorScreen()),
+                    builder: (context) =>
+                    const DateDifferenceCalculatorScreen()
+                ),
               );
             },
           ),
           ListTile(
-            title: Text('Kütle Hesaplama', style: TextStyle(color: themeProvider.textColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MassCalculatorScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Sıcaklık Hesaplama', style: TextStyle(color: themeProvider.textColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const TemperatureCalculatorScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Hacim Hesaplama', style: TextStyle(color: themeProvider.textColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const VolumeCalculatorScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Numeral Sistem Hesaplama', style: TextStyle(color: themeProvider.textColor)),
+            title: Text('calculatorScreen.timeCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const NumeralSystemCalculatorScreen()),
+                    builder: (context) => const TimeCalculatorScreen()
+                ),
               );
             },
           ),
           ListTile(
-            title: Text('Alan Hesaplama', style: TextStyle(color: themeProvider.textColor)),
+            title: Text('calculatorScreen.lengthCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AreaCalculatorScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const LengthCalculatorScreen()
+                ),
               );
             },
           ),
           ListTile(
-            title: Text('Hesap Makinesi', style: TextStyle(color: themeProvider.textColor)),
+            title: Text('calculatorScreen.massCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const BasicCalculatorScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const MassCalculatorScreen()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('calculatorScreen.temperatureCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                    const TemperatureCalculatorScreen()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('calculatorScreen.volumeCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const VolumeCalculatorScreen()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('calculatorScreen.numeralSystemCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                    const NumeralSystemCalculatorScreen()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('calculatorScreen.areaCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AreaCalculatorScreen()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('calculatorScreen.basicCalculator'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const BasicCalculatorScreen()
+                ),
               );
             },
           ),

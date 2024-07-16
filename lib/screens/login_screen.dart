@@ -3,6 +3,7 @@ import 'package:note_engineer/theme_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,17 +48,17 @@ class LoginScreenState extends State<LoginScreen> {
       _handleSignInResponse(response);
     } on AuthException catch (e) {
       if (e.message.contains('Invalid login credentials')) {
-        _showError('Geçersiz e-posta veya şifre!');
+        _showError('loginScreen.invalidEmailOrPassword'.tr());
       } else if (e.message.contains('User not found')) {
-        _showError('Kullanıcı bulunamadı!');
+        _showError('loginScreen.userNotFound'.tr());
       } else {
-        _showError('Giriş yapılamadı. Lütfen daha sonra tekrar deneyin.');
+        _showError('loginScreen.loginFailed'.tr());
       }
       setState(() {
         _isLogin = false;
       });
     } catch (e) {
-      _showError('Hata: $e');
+      _showError('Error: $e');
     }
   }
 
@@ -69,7 +70,7 @@ class LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else {
-      _showError('Giriş Başarısız!');
+      _showError('loginScreen.registrationFailed'.tr());
     }
   }
 
@@ -77,13 +78,16 @@ class LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: themeProvider.accentColor,),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: themeProvider.accentColor,
+      ),
     );
   }
 
   Future<void> _signUp() async {
     if (_passwordController.text != _passwordConfirmController.text) {
-      _showError('Parolalar eşleşmiyor!');
+      _showError('loginScreen.passwordsNotMatch'.tr());
       return;
     }
 
@@ -93,23 +97,27 @@ class LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       if (response.user != null) {
-        _showMessage('Kayıt başarılı! Lütfen giriş yapın.');
+        _showMessage('loginScreen.registrationSuccessful'.tr());
         setState(() {
           _isLogin = true;
         });
       } else {
-        _showError('Kayıt Başarısız!');
+        _showError('loginScreen.registrationFailed'.tr());
       }
     } catch (e) {
-      _showError('Hata: $e');
+      _showError('Error: $e');
     }
   }
 
   void _showMessage(String message) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message), backgroundColor: themeProvider.accentColor,));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: themeProvider.accentColor,
+      ),
+    );
   }
 
   @override
@@ -119,7 +127,10 @@ class LoginScreenState extends State<LoginScreen> {
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(_isLogin ? 'Giriş Yap' : 'Kayıt Ol', style: TextStyle(color: themeProvider.textColor)),
+        title: Text(
+          _isLogin ? 'loginScreen.login'.tr() : 'loginScreen.signUp'.tr(),
+          style: TextStyle(color: themeProvider.textColor),
+        ),
         backgroundColor: themeProvider.accentColor,
       ),
       body: Padding(
@@ -129,19 +140,28 @@ class LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: themeProvider.textColor)),
+              decoration: InputDecoration(
+                labelText: 'loginScreen.email'.tr(),
+                labelStyle: TextStyle(color: themeProvider.textColor),
+              ),
               style: TextStyle(color: themeProvider.textColor),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: themeProvider.textColor)),
+              decoration: InputDecoration(
+                labelText: 'loginScreen.password'.tr(),
+                labelStyle: TextStyle(color: themeProvider.textColor),
+              ),
               obscureText: true,
               style: TextStyle(color: themeProvider.textColor),
             ),
             if (!_isLogin)
               TextField(
                 controller: _passwordConfirmController,
-                decoration: InputDecoration(labelText: 'Password (Tekrar)', labelStyle: TextStyle(color: themeProvider.textColor)),
+                decoration: InputDecoration(
+                  labelText: 'loginScreen.passwordConfirmation'.tr(),
+                  labelStyle: TextStyle(color: themeProvider.textColor),
+                ),
                 obscureText: true,
                 style: TextStyle(color: themeProvider.textColor),
               ),
@@ -152,7 +172,10 @@ class LoginScreenState extends State<LoginScreen> {
                 backgroundColor: themeProvider.accentColor,
                 foregroundColor: themeProvider.textColor,
               ),
-              child: Text(_isLogin ? 'Giriş Yap' : 'Kayıt Ol'),
+              child: Text(_isLogin
+                  ? 'loginScreen.login'.tr()
+                  : 'loginScreen.signUp'.tr()
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -161,7 +184,9 @@ class LoginScreenState extends State<LoginScreen> {
                 });
               },
               child: Text(
-                _isLogin ? 'Hesabın yok mu? Kayıt ol' : 'Hesabın var mı? Giriş yap',
+                _isLogin
+                    ? 'loginScreen.noAccount'.tr()
+                    : 'loginScreen.haveAccount'.tr(),
                 style: TextStyle(color: themeProvider.accentColor),
               ),
             ),
