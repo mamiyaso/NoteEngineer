@@ -98,82 +98,78 @@ class HomeScreenState extends State<HomeScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: themeProvider.backgroundColor,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _showFavorites = !_showFavorites;
-                    });
-                    fetchNotes();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: themeProvider.accentColor,
-                    foregroundColor: themeProvider.textColor,
-                  ),
-                  child: Text(_showFavorites
-                      ? 'homeScreen.favorites'.tr()
-                      : 'homeScreen.allNotes'.tr()),
-                ),
-                DropdownButton<String>(
-                  value: _sortType,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _sortType = newValue!;
-                      notes = supabaseService.sortNotes(
-                          notes, _sortType, _isAscending);
-                    });
-                  },
-                  dropdownColor: themeProvider.backgroundColor,
-                  icon: Icon(Icons.arrow_drop_down,
-                      color: themeProvider.textColor),
-                  items: <String>['created_at', 'updated_at', 'title']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value == 'created_at'
-                            ? 'homeScreen.creationDate'.tr()
-                            : value == 'updated_at'
-                            ? 'homeScreen.modificationDate'.tr()
-                            : 'homeScreen.byTitle'.tr(),
-                        style: TextStyle(color: themeProvider.textColor),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                IconButton(
-                  icon: Icon(
-                      _isAscending ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: themeProvider.textColor),
-                  onPressed: () {
-                    setState(() {
-                      _isAscending = !_isAscending;
-                      notes = supabaseService.sortNotes(
-                          notes, _sortType, _isAscending);
-                    });
-                    fetchNotes();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings, color: themeProvider.textColor),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/settings');
-                  },
-                ),
-              ],
+      appBar: AppBar(
+        backgroundColor: themeProvider.accentColor,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _showFavorites = !_showFavorites;
+                });
+                fetchNotes();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: themeProvider.accentColor,
+                foregroundColor: themeProvider.textColor,
+              ),
+              child: Text(_showFavorites
+                  ? 'homeScreen.favorites'.tr()
+                  : 'homeScreen.allNotes'.tr()),
             ),
-          ),
-          Expanded(
-            child:_buildListNotes(themeProvider),
+            DropdownButton<String>(
+              value: _sortType,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _sortType = newValue!;
+                  notes = supabaseService.sortNotes(notes, _sortType, _isAscending);
+                });
+              },
+              dropdownColor: themeProvider.backgroundColor,
+              icon: Icon(Icons.arrow_drop_down, color: themeProvider.textColor),
+              items: <String>['created_at', 'updated_at', 'title']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value == 'created_at'
+                        ? 'homeScreen.creationDate'.tr()
+                        : value == 'updated_at'
+                        ? 'homeScreen.modificationDate'.tr()
+                        : 'homeScreen.byTitle'.tr(),
+                    style: TextStyle(color: themeProvider.textColor),
+                  ),
+                );
+              }).toList(),
+            ),
+            IconButton(
+              icon: Icon(
+                  _isAscending ? Icons.arrow_upward : Icons.arrow_downward,
+                  color: themeProvider.textColor),
+              onPressed: () {
+                setState(() {
+                  _isAscending = !_isAscending;
+                  notes = supabaseService.sortNotes(notes, _sortType, _isAscending);
+                });
+                fetchNotes();
+              },
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, color: themeProvider.textColor),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
           ),
         ],
       ),
+  body:
+          Expanded(
+            child:_buildListNotes(themeProvider),
+          ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
