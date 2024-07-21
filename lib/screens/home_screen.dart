@@ -165,9 +165,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Expanded(
-        child: _buildListNotes(themeProvider),
-      ),
+      body: _buildListNotes(themeProvider),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
