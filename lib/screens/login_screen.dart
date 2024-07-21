@@ -101,6 +101,10 @@ class LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLogin = true;
         });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       } else {
         _showError('loginScreen.registrationFailed'.tr());
       }

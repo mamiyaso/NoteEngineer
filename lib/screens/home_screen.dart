@@ -19,23 +19,22 @@ class HomeScreenState extends State<HomeScreen> {
   final SupabaseService supabaseService = SupabaseService();
   final _supabaseClient = Supabase.instance.client;
   List<Map<String, dynamic>> notes = [];
-  List<Map<String, dynamic>> filteredNotes = [];
-  bool _isGrid = false;
   bool _isAscending = true;
   String _sortType = 'created_at';
   bool _showFavorites = false;
   bool isLoading = true;
-  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    fetchNotes();
+    _setupRealtimeUpdates();
   }
 
-  @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    super.dispose();
+  Future<void> _setupRealtimeUpdates() async {
+    _supabaseClient.from('notes').stream(primaryKey: ['*']).listen((event) {
+      fetchNotes();
+    });
   }
 
   Future<void> fetchNotes() async {
@@ -58,7 +57,6 @@ class HomeScreenState extends State<HomeScreen> {
       notes = supabaseService.sortNotes(notes, _sortType, _isAscending);
       isLoading = false;
     });
-    FocusScope.of(context).requestFocus(FocusNode());
   }
 
   Future<void> _addToFavorites(String noteId) async {
@@ -69,6 +67,7 @@ class HomeScreenState extends State<HomeScreen> {
         notes[noteIndex]['is_favorite'] = true;
       }
     });
+    fetchNotes();
   }
 
   Future<void> _removeFromFavorites(String noteId) async {
@@ -79,24 +78,13 @@ class HomeScreenState extends State<HomeScreen> {
         notes[noteIndex]['is_favorite'] = false;
       }
     });
+    fetchNotes();
   }
 
   Future<void> _deleteNote(String noteId) async {
     await supabaseService.deleteNote(noteId);
+    fetchNotes();
   }
-
-  void _searchNotes(String query) {
-    setState(() {
-      filteredNotes = notes.where((note) {
-        final title = note['title'].toLowerCase();
-        final content = note['content'].toLowerCase();
-        final searchTerm = query.toLowerCase();
-
-        return title.contains(searchTerm) || content.contains(searchTerm);
-      }).toList();
-    });
-  }
-
 
   void _onNoteSaved() {
     fetchNotes();
@@ -109,17 +97,64 @@ class HomeScreenState extends State<HomeScreen> {
       backgroundColor: themeProvider.backgroundColor,
       appBar: AppBar(
         backgroundColor: themeProvider.accentColor,
-        title: TextField(
-          focusNode: _searchFocusNode,
-          decoration: InputDecoration(
-            hintText: 'homeScreen.searchNotes'.tr(),
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: themeProvider.textColor),
-          ),
-          onChanged: (query) {
-            _searchNotes(query);
-          },
-          style: TextStyle(color: themeProvider.textColor),
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _showFavorites = !_showFavorites;
+                });
+                fetchNotes();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: themeProvider.accentColor,
+                foregroundColor: themeProvider.textColor,
+              ),
+              child: Text(_showFavorites
+                  ? 'homeScreen.favorites'.tr()
+                  : 'homeScreen.allNotes'.tr()),
+            ),
+            DropdownButton<String>(
+              value: _sortType,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _sortType = newValue!;
+                  notes =
+                      supabaseService.sortNotes(notes, _sortType, _isAscending);
+                });
+              },
+              dropdownColor: themeProvider.backgroundColor,
+              icon: Icon(Icons.arrow_drop_down, color: themeProvider.textColor),
+              items: <String>['created_at', 'updated_at', 'title']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value == 'created_at'
+                        ? 'homeScreen.creationDate'.tr()
+                        : value == 'updated_at'
+                            ? 'homeScreen.modificationDate'.tr()
+                            : 'homeScreen.byTitle'.tr(),
+                    style: TextStyle(color: themeProvider.textColor),
+                  ),
+                );
+              }).toList(),
+            ),
+            IconButton(
+              icon: Icon(
+                  _isAscending ? Icons.arrow_upward : Icons.arrow_downward,
+                  color: themeProvider.textColor),
+              onPressed: () {
+                setState(() {
+                  _isAscending = !_isAscending;
+                  notes =
+                      supabaseService.sortNotes(notes, _sortType, _isAscending);
+                });
+                fetchNotes();
+              },
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -129,89 +164,9 @@ class HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
-        automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _showFavorites = !_showFavorites;
-                      filteredNotes = _showFavorites
-                          ? notes.where((note) => note['is_favorite']).toList()
-                          : notes;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: themeProvider.accentColor,
-                    foregroundColor: themeProvider.textColor,
-                  ),
-                  child: Text(_showFavorites
-                      ? 'homeScreen.favorites'.tr()
-                      : 'homeScreen.allNotes'.tr()),
-                ),
-                DropdownButton<String>(
-                  value: _sortType,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _sortType = newValue!;
-                      notes = supabaseService.sortNotes(
-                          notes, _sortType, _isAscending);
-                    });
-                  },
-                  dropdownColor: themeProvider.backgroundColor,
-                  icon: Icon(Icons.arrow_drop_down,
-                      color: themeProvider.textColor),
-                  items: <String>['created_at', 'updated_at', 'title']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value == 'created_at'
-                            ? 'homeScreen.creationDate'.tr()
-                            : value == 'updated_at'
-                            ? 'homeScreen.modificationDate'.tr()
-                            : 'homeScreen.byTitle'.tr(),
-                        style: TextStyle(color: themeProvider.textColor),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                IconButton(
-                  icon: Icon(
-                      _isAscending ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: themeProvider.textColor),
-                  onPressed: () {
-                    setState(() {
-                      _isAscending = !_isAscending;
-                      notes = supabaseService.sortNotes(
-                          notes, _sortType, _isAscending);
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: Icon(_isGrid ? Icons.view_list : Icons.view_module,
-                      color: themeProvider.textColor),
-                  onPressed: () {
-                    setState(() {
-                      _isGrid = !_isGrid;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: _isGrid
-                ? _buildGridNotes(themeProvider)
-                : _buildListNotes(themeProvider),
-          ),
-        ],
+      body: Expanded(
+        child: _buildListNotes(themeProvider),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -250,62 +205,6 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildGridNotes(ThemeProvider themeProvider) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await fetchNotes();
-      },
-      child: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(notes.length, (index) {
-          final note = notes[index];
-          final firstLine = note['content'].split('\n').first;
-          return Card(
-            color: themeProvider.backgroundColor,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NoteEditScreen(
-                      onSave: _onNoteSaved,
-                      noteId: note['id'],
-                      initialTitle: note['title'],
-                      initialContent: note['content'],
-                    ),
-                  ),
-                );
-              },
-              onLongPress: () => _showNoteOptions(note),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      note['title'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: themeProvider.textColor,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(firstLine,
-                        style: TextStyle(color: themeProvider.textColor)),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-
   Widget _buildListNotes(ThemeProvider themeProvider) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -319,7 +218,7 @@ class HomeScreenState extends State<HomeScreen> {
           final firstLine = note['content'].split('\n').first;
           final createdAt = DateTime.parse(note['created_at']);
           final formattedDate =
-          DateFormat('HH:mm dd.MM.yyyy', 'tr_TR').format(createdAt);
+              DateFormat('HH:mm dd.MM.yyyy', 'tr_TR').format(createdAt);
 
           return ListTile(
             key: ValueKey(note['id']),

@@ -137,7 +137,7 @@
     "userNotFound": "Kullanıcı bulunamadı!",
     "loginFailed": "Giriş yapılamadı. Lütfen daha sonra tekrar deneyin.",
     "passwordsNotMatch": "Şifreler eşleşmiyor!",
-    "registrationSuccessful": "Kayıt başarılı! Lütfen giriş yapın.",
+    "registrationSuccessful": "Kayıt başarılı!",
     "registrationFailed": "Kayıt Başarısız!"
   },
 

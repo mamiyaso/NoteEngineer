@@ -174,8 +174,7 @@ class HexKeyPad extends StatelessWidget {
                     ),
                     onPressed: () => onDeletePressed(context),
                     child: Icon(Icons.backspace_outlined,
-                        color: themeProvider.accentColor
-                    ),
+                        color: themeProvider.accentColor),
                   ),
                 ),
               ),
@@ -239,8 +238,7 @@ class HexKeyPad extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              _buildButton('',
-                  flex: 1, onPressed: () {}, themeProvider: themeProvider),
+              _buildEmptyButton(themeProvider),
               _buildButton('0',
                   onPressed: () => onKeyPressed('0'),
                   themeProvider: themeProvider),
@@ -248,8 +246,7 @@ class HexKeyPad extends StatelessWidget {
                   onPressed: () => onKeyPressed('.'),
                   alwaysEnabled: true,
                   themeProvider: themeProvider),
-              _buildButton('',
-                  flex: 1, onPressed: () {}, themeProvider: themeProvider),
+              _buildEmptyButton(themeProvider),
             ],
           ),
         ),
@@ -269,7 +266,6 @@ class HexKeyPad extends StatelessWidget {
                 int.tryParse(text) != null &&
                 int.parse(text) < 8) ||
             (unit == '2' && int.tryParse(text) != null && int.parse(text) < 2));
-
     return Expanded(
       flex: flex.toInt(),
       child: Padding(
@@ -288,6 +284,17 @@ class HexKeyPad extends StatelessWidget {
               color: isEnabled ? themeProvider.accentColor : Colors.grey,
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyButton(ThemeProvider themeProvider) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          color: themeProvider.backgroundColor,
         ),
       ),
     );

@@ -136,7 +136,7 @@
     "userNotFound": "User not found!",
     "loginFailed": "Login failed. Please try again later.",
     "passwordsNotMatch": "Passwords don't match!",
-    "registrationSuccessful": "Registration successful! Please log in.",
+    "registrationSuccessful": "Registration successful!",
     "registrationFailed": "Registration failed!"
   },
 
