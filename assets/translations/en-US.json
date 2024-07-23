@@ -10,8 +10,11 @@
     "title": "Age Calculator",
     "selectBirthDate": "Select Birth Date",
     "selectCurrentDate": "Select Current Date",
-    "agePrefix": "Age: {age}",
-    "age": "{0} years, {1} months, {2} days old"
+    "agePrefix": "Age:",
+    "years": "years",
+    "months": "months",
+    "days": "days",
+    "selectBothDates": "Please select both birth date and current date"
   },
 
   "areaConverter":
@@ -61,8 +64,9 @@
     "title": "Date Difference Calculator",
     "selectStartDate": "Select Start Date",
     "selectEndDate": "Select End Date",
-    "differencePrefix": "Difference: {difference}",
-    "difference": "{0} days"
+    "differencePrefix": "Difference:",
+    "differenceSuffix": "days",
+    "selectBothDates": "Please select both dates"
   },
 
   "deletedNotesScreen":
@@ -165,7 +169,12 @@
     "enterMathExpression": "Enter mathematical expression here...",
     "invalidMathExpression": "Invalid mathematical expression!",
     "noteSaved": "Note saved as {filename}",
-    "errorSavingFile": "An error occurred while saving the file: {error}"
+    "errorSavingFile": "An error occurred while saving the file: {error}",
+    "addFromDevice": "Add from Device",
+    "warningTitle": "Warning",
+    "warningContent": "Current note has content. What would you like to do?",
+    "overwrite": "Overwrite",
+    "createNew": "Create New Note"
   },
 
   "numeralSystemConverter":

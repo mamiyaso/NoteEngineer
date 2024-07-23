@@ -13,83 +13,51 @@ class AgeCalculatorScreen extends StatefulWidget {
 class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
   DateTime? _birthDate;
   DateTime? _currentDate = DateTime.now();
-  String _age = '';
+  int _years = 0;
+  int _months = 0;
+  int _days = 0;
 
-  _selectBirthDate(BuildContext context) async {
+  _selectDate(BuildContext context, bool isBirthDate) async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: isBirthDate
+          ? (_birthDate ?? DateTime.now())
+          : (_currentDate ?? DateTime.now()),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: isBirthDate ? DateTime.now() : DateTime(2100),
       builder: (context, child) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
         return Theme(
-          data: themeProvider.themeMode == ThemeMode.dark
-              ? ThemeData.dark().copyWith(
-            colorScheme: ColorScheme.dark().copyWith(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
               primary: themeProvider.accentColor,
-              onPrimary: themeProvider.textColor,
+              onPrimary: themeProvider.backgroundColor,
               onSurface: themeProvider.textColor,
+              surface: themeProvider.backgroundColor,
             ),
             dialogBackgroundColor: themeProvider.backgroundColor,
-            textTheme: TextTheme(
-              bodyMedium: TextStyle(color: themeProvider.textColor),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: themeProvider.accentColor,
+              ),
             ),
-          )
-              : ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light().copyWith(
-              primary: themeProvider.accentColor,
-              onPrimary: themeProvider.textColor,
-              onSurface: themeProvider.textColor,
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(color: themeProvider.textColor),
+              bodyMedium: TextStyle(color: themeProvider.textColor),
+              titleMedium: TextStyle(color: themeProvider.textColor),
             ),
           ),
           child: child!,
         );
       },
     );
-    if (picked != null && picked != _birthDate) {
+    if (picked != null) {
       setState(() {
-        _birthDate = picked;
-        _calculateAge();
-      });
-    }
-  }
-
-  _selectCurrentDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-      builder: (context, child) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
-        return Theme(
-          data: themeProvider.themeMode == ThemeMode.dark
-              ? ThemeData.dark().copyWith(
-            colorScheme: ColorScheme.dark().copyWith(
-              primary: themeProvider.accentColor,
-              onPrimary: themeProvider.textColor,
-              onSurface: themeProvider.textColor,
-            ),
-            dialogBackgroundColor: themeProvider.backgroundColor,
-            textTheme: TextTheme(
-              bodyMedium: TextStyle(color: themeProvider.textColor),
-            ),
-          )
-              : ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light().copyWith(
-              primary: themeProvider.accentColor,
-              onPrimary: themeProvider.textColor,
-              onSurface: themeProvider.textColor,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != _currentDate) {
-      setState(() {
-        _currentDate = picked;
+        if (isBirthDate) {
+          _birthDate = picked;
+        } else {
+          _currentDate = picked;
+        }
         _calculateAge();
       });
     }
@@ -97,22 +65,20 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
 
   _calculateAge() {
     if (_birthDate != null && _currentDate != null) {
-      int years = _currentDate!.year - _birthDate!.year;
-      int months = _currentDate!.month - _birthDate!.month;
-      int days = _currentDate!.day - _birthDate!.day;
+      _years = _currentDate!.year - _birthDate!.year;
+      _months = _currentDate!.month - _birthDate!.month;
+      _days = _currentDate!.day - _birthDate!.day;
 
-      if (days < 0) {
-        months -= 1;
-        days += DateTime(_currentDate!.year, _currentDate!.month, 0).day;
+      if (_days < 0) {
+        _months -= 1;
+        _days += DateTime(_currentDate!.year, _currentDate!.month, 0).day;
       }
-      if (months < 0) {
-        years -= 1;
-        months += 12;
+      if (_months < 0) {
+        _years -= 1;
+        _months += 12;
       }
 
-      setState(() {
-        _age = 'ageCalculatorScreen.age'.tr(args: ['$years', '$months', '$days']);
-      });
+      setState(() {});
     }
   }
 
@@ -139,8 +105,9 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
                     : DateFormat.yMMMd().format(_birthDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
-              trailing: Icon(Icons.calendar_today, color: themeProvider.accentColor),
-              onTap: () => _selectBirthDate(context),
+              trailing:
+                  Icon(Icons.calendar_today, color: themeProvider.accentColor),
+              onTap: () => _selectDate(context, true),
             ),
             ListTile(
               title: Text(
@@ -149,12 +116,15 @@ class AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
                     : DateFormat.yMMMd().format(_currentDate!),
                 style: TextStyle(color: themeProvider.textColor),
               ),
-              trailing: Icon(Icons.calendar_today, color: themeProvider.accentColor),
-              onTap: () => _selectCurrentDate(context),
+              trailing:
+                  Icon(Icons.calendar_today, color: themeProvider.accentColor),
+              onTap: () => _selectDate(context, false),
             ),
             const SizedBox(height: 20),
             Text(
-              'ageCalculatorScreen.agePrefix'.tr(namedArgs: {'age': _age}),
+              _birthDate != null && _currentDate != null
+                  ? '${'ageCalculatorScreen.agePrefix'.tr()} $_years ${'ageCalculatorScreen.years'.tr()}, $_months ${'ageCalculatorScreen.months'.tr()}, $_days ${'ageCalculatorScreen.days'.tr()}'
+                  : 'ageCalculatorScreen.selectBothDates'.tr(),
               style: TextStyle(fontSize: 24, color: themeProvider.textColor),
             ),
           ],

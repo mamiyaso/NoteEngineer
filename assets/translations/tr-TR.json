@@ -10,8 +10,11 @@
     "title": "Yaş Hesaplama",
     "selectBirthDate": "Doğum Tarihini Seç",
     "selectCurrentDate": "Güncel Tarihi Seç",
-    "agePrefix": "Yaş: {age}",
-    "age": "{0} yıl, {1} ay, {2} gün"
+    "agePrefix": "Yaş:",
+    "years": "yıl",
+    "months": "ay",
+    "days": "gün",
+    "selectBothDates": "Lütfen doğum tarihi ve güncel tarihi seçin"
   },
 
   "areaConverter":
@@ -62,8 +65,9 @@
     "title": "Tarih Farkı Hesaplama",
     "selectStartDate": "Başlangıç Tarihini Seç",
     "selectEndDate": "Bitiş Tarihini Seç",
-    "differencePrefix": "Fark: {difference}",
-    "difference": "{0} gün"
+    "differencePrefix": "Fark:",
+    "differenceSuffix": "gün",
+    "selectBothDates": "Lütfen iki tarih seçin"
   },
 
   "deletedNotesScreen":
@@ -166,7 +170,12 @@
     "enterMathExpression": "Matematiksel ifadeyi buraya girin...",
     "invalidMathExpression": "Geçersiz matematiksel ifade!",
     "noteSaved": "Notunuz {filename} olarak kaydedildi",
-    "errorSavingFile": "Dosya kaydedilirken hata oluştu: {error}"
+    "errorSavingFile": "Dosya kaydedilirken hata oluştu: {error}",
+    "addFromDevice": "Cihazdan Ekle",
+    "warningTitle": "Uyarı",
+    "warningContent": "Mevcut notun içeriği var. Ne yapmak istersiniz?",
+    "overwrite": "Üzerine Yaz",
+    "createNew": "Yeni Not Oluştur"
   },
 
   "numeralSystemConverter":

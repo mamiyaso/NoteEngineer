@@ -86,7 +86,8 @@ class KeyPad extends StatelessWidget {
                     ),
                     onPressed: () => onDeletePressed(context),
                     child: Icon(Icons.backspace_outlined,
-                        color: themeProvider.accentColor),
+                        color: themeProvider.accentColor
+                    ),
                   ),
                 ),
               ),
@@ -174,7 +175,8 @@ class HexKeyPad extends StatelessWidget {
                     ),
                     onPressed: () => onDeletePressed(context),
                     child: Icon(Icons.backspace_outlined,
-                        color: themeProvider.accentColor),
+                        color: themeProvider.accentColor
+                    ),
                   ),
                 ),
               ),
@@ -282,6 +284,115 @@ class HexKeyPad extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               color: isEnabled ? themeProvider.accentColor : Colors.grey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyButton(ThemeProvider themeProvider) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          color: themeProvider.backgroundColor,
+        ),
+      ),
+    );
+  }
+}
+
+class TemperatureKeyPad extends StatelessWidget {
+  final Function(String) onKeyPressed;
+  final Function(BuildContext) onDeletePressed;
+  final Function() onToggleSign;
+
+  const TemperatureKeyPad({
+    Key? key,
+    required this.onKeyPressed,
+    required this.onDeletePressed,
+    required this.onToggleSign,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              _buildButton('7', onPressed: () => onKeyPressed('7'), themeProvider: themeProvider),
+              _buildButton('8', onPressed: () => onKeyPressed('8'), themeProvider: themeProvider),
+              _buildButton('9', onPressed: () => onKeyPressed('9'), themeProvider: themeProvider),
+              _buildButton('+/-', onPressed: onToggleSign, themeProvider: themeProvider),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              _buildButton('4', onPressed: () => onKeyPressed('4'), themeProvider: themeProvider),
+              _buildButton('5', onPressed: () => onKeyPressed('5'), themeProvider: themeProvider),
+              _buildButton('6', onPressed: () => onKeyPressed('6'), themeProvider: themeProvider),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: themeProvider.textColor,
+                      backgroundColor: themeProvider.backgroundColor,
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                    ),
+                    onPressed: () => onDeletePressed(context),
+                    child: Icon(Icons.backspace_outlined, color: themeProvider.accentColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              _buildButton('1', onPressed: () => onKeyPressed('1'), themeProvider: themeProvider),
+              _buildButton('2', onPressed: () => onKeyPressed('2'), themeProvider: themeProvider),
+              _buildButton('3', onPressed: () => onKeyPressed('3'), themeProvider: themeProvider),
+              _buildButton('.', onPressed: () => onKeyPressed('.'), themeProvider: themeProvider),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              _buildEmptyButton(themeProvider),
+              _buildButton('0', onPressed: () => onKeyPressed('0'), themeProvider: themeProvider),
+              _buildEmptyButton(themeProvider),
+              _buildEmptyButton(themeProvider),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButton(String text, {required Function() onPressed, required ThemeProvider themeProvider}) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: themeProvider.textColor,
+            backgroundColor: themeProvider.backgroundColor,
+            padding: const EdgeInsets.symmetric(vertical: 24),
+          ),
+          onPressed: onPressed,
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 24,
+              color: themeProvider.accentColor,
             ),
           ),
         ),

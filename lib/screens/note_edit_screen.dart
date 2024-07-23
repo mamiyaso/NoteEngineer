@@ -18,11 +18,11 @@ class NoteEditScreen extends StatefulWidget {
 
   const NoteEditScreen(
       {super.key,
-        required this.onSave,
-        this.noteId,
-        this.initialTitle,
-        this.initialContent,
-        this.initialUpdatedAt});
+      required this.onSave,
+      this.noteId,
+      this.initialTitle,
+      this.initialContent,
+      this.initialUpdatedAt});
 
   @override
   NoteEditScreenState createState() => NoteEditScreenState();
@@ -76,39 +76,45 @@ class NoteEditScreenState extends State<NoteEditScreen> {
       }
       return;
     }
-    final encryptedTitle = title.isNotEmpty
-        ? await EncryptionService.encryptData(title)
-        : await null;
-    final encryptedContent = content.isNotEmpty
-        ? await EncryptionService.encryptData(content)
-        : await null;
 
-    bool isUpdated = (widget.initialTitle != null &&
-        _titleController.text != widget.initialTitle!) ||
-        (widget.initialContent != null &&
-            _contentController.text != widget.initialContent!);
+    String? encryptedTitle;
+    String? encryptedContent;
 
-    if (widget.noteId == null) {
-      await _supabaseClient.from('notes').insert({
-        'user_id': userId,
-        'title': encryptedTitle,
-        'content': encryptedContent,
-        'created_at': DateTime.now().toIso8601String(),
-        'updated_at': DateTime.now().toIso8601String(),
-        'is_favorite': false,
-        'is_trashed': false,
-      });
-    } else if (isUpdated) {
-      await _supabaseClient.from('notes').update({
-        'title': encryptedTitle,
-        'content': encryptedContent,
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('id', widget.noteId as Object);
-    }
+    try {
+      if (title.isNotEmpty) {
+        encryptedTitle = await EncryptionService.encryptData(userId, title);
+      }
+      if (content.isNotEmpty) {
+        encryptedContent = await EncryptionService.encryptData(userId, content);
+      }
 
-    widget.onSave();
-    if (mounted) {
-      Navigator.pop(context);
+      if (widget.noteId == null) {
+        await _supabaseClient.from('notes').insert({
+          'user_id': userId,
+          'title': encryptedTitle,
+          'content': encryptedContent,
+          'created_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
+          'is_favorite': false,
+          'is_trashed': false,
+        });
+      } else {
+        await _supabaseClient.from('notes').update({
+          'title': encryptedTitle,
+          'content': encryptedContent,
+          'updated_at': DateTime.now().toIso8601String(),
+        }).eq('id', widget.noteId as Object);
+      }
+
+      widget.onSave();
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print('Error saving note: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving note: $e')),
+      );
     }
   }
 
@@ -193,17 +199,13 @@ class NoteEditScreenState extends State<NoteEditScreen> {
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content:
-                Text('noteEditScreen.invalidMathExpression'.tr())
+                content: Text('noteEditScreen.invalidMathExpression'.tr())
             ),
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-              Text('noteEditScreen.invalidMathExpression'.tr())
-          ),
+          SnackBar(content: Text('noteEditScreen.invalidMathExpression'.tr())),
         );
       }
     } else {
@@ -219,10 +221,7 @@ class NoteEditScreenState extends State<NoteEditScreen> {
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-              Text('noteEditScreen.invalidMathExpression'.tr())
-          ),
+          SnackBar(content: Text('noteEditScreen.invalidMathExpression'.tr())),
         );
       }
     }
@@ -242,9 +241,8 @@ class NoteEditScreenState extends State<NoteEditScreen> {
   Future<void> _saveToTextFile() async {
     final String content =
         '${_titleController.text}\n${_contentController.text}';
-    final String fileName = _titleController.text
-        .replaceAll(RegExp(r'[^\w\s]+'), '')
-        .trim();
+    final String fileName =
+        _titleController.text.replaceAll(RegExp(r'[^\w\s]+'), '').trim();
 
     String? selectedDirectory;
     final prefs = await SharedPreferences.getInstance();
@@ -265,11 +263,9 @@ class NoteEditScreenState extends State<NoteEditScreen> {
       final File file = File(filePath);
       await file.writeAsString(content);
 
-      _showSnackBar(
-          'noteEditScreen.noteSaved'.tr(args: [fileName]));
+      _showSnackBar('noteEditScreen.noteSaved'.tr(args: [fileName]));
     } catch (e) {
-      _showSnackBar(
-          'noteEditScreen.errorSavingFile'.tr(args: [e.toString()]));
+      _showSnackBar('noteEditScreen.errorSavingFile'.tr(args: [e.toString()]));
     }
   }
 
@@ -279,6 +275,74 @@ class NoteEditScreenState extends State<NoteEditScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
+  }
+
+  Future<void> _addFromDevice() async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    if (_titleController.text.isNotEmpty ||
+        _contentController.text.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: themeProvider.backgroundColor,
+            title: Text('noteEditScreen.warningTitle'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            content: Text('noteEditScreen.warningContent'.tr(),
+                style: TextStyle(color: themeProvider.textColor)
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('noteEditScreen.overwrite'.tr(),
+                    style: TextStyle(color: themeProvider.accentColor)
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _titleController.clear();
+                  _contentController.clear();
+                  _pickAndLoadFile();
+                },
+              ),
+              TextButton(
+                child: Text('noteEditScreen.createNew'.tr(),
+                    style: TextStyle(color: themeProvider.accentColor)
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _saveNote().then((_) {
+                    _titleController.clear();
+                    _contentController.clear();
+                    _pickAndLoadFile();
+                  });
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      _pickAndLoadFile();
+    }
+  }
+
+  Future<void> _pickAndLoadFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt'],
+    );
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      String content = await file.readAsString();
+      List<String> lines = content.split('\n');
+
+      setState(() {
+        _titleController.text = lines.isNotEmpty ? lines[0] : '';
+        _contentController.text =
+            lines.length > 1 ? lines.sublist(1).join('\n') : '';
+      });
+    }
   }
 
   @override
@@ -308,6 +372,8 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                 _toggleMathField();
               } else if (value == 'save-txt') {
                 _saveToTextFile();
+              } else if (value == 'add-from-device') {
+                _addFromDevice();
               }
             },
             itemBuilder: (context) => [
@@ -335,6 +401,12 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                     style: TextStyle(color: themeProvider.textColor)
                 ),
               ),
+              PopupMenuItem(
+                value: 'add-from-device',
+                child: Text('noteEditScreen.addFromDevice'.tr(),
+                    style: TextStyle(color: themeProvider.textColor)
+                ),
+              ),
             ],
           ),
         ],
@@ -354,9 +426,8 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                     decoration: InputDecoration(
                       hintText: 'noteEditScreen.enterTitle'.tr(),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold
-                      ),
+                      hintStyle:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     style: TextStyle(
                       fontSize: 24,
@@ -382,8 +453,7 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                       focusNode: _mathFocusNode,
                       controller: _mathController,
                       decoration: InputDecoration(
-                        hintText:
-                        'noteEditScreen.enterMathExpression'.tr(),
+                        hintText: 'noteEditScreen.enterMathExpression'.tr(),
                         border: InputBorder.none,
                         isCollapsed: true,
                         contentPadding: const EdgeInsets.all(16.0),
@@ -396,10 +466,8 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.calculate,
-                        color: themeProvider.accentColor
-                    )
-                    ,
+                    icon:
+                        Icon(Icons.calculate, color: themeProvider.accentColor),
                     onPressed: _calculateMathExpression,
                   ),
                 ],
@@ -427,16 +495,15 @@ class NoteEditScreenState extends State<NoteEditScreen> {
                   ),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
-                  style: TextStyle(
-                      fontSize: 16.0, color: themeProvider.textColor
-                  ),
+                  style:
+                      TextStyle(fontSize: 16.0, color: themeProvider.textColor),
                   textAlignVertical: TextAlignVertical.top,
                   expands: true,
                   buildCounter: (context,
-                      {required currentLength,
-                        required isFocused,
-                        maxLength}) =>
-                  null,
+                          {required currentLength,
+                          required isFocused,
+                          maxLength}) =>
+                      null,
                 ),
               ),
             ),
@@ -494,13 +561,12 @@ class NoteEditScreenState extends State<NoteEditScreen> {
   }
 
   void _insertAtCursor(String text) {
-    final TextEditingController controller = _contentFocusNode.hasFocus
-        ? _contentController
-        : _mathController;
+    final TextEditingController controller =
+        _contentFocusNode.hasFocus ? _contentController : _mathController;
     final textValue = controller.text;
     final cursorPosition = controller.selection.baseOffset;
     final newText =
-    textValue.replaceRange(cursorPosition, cursorPosition, text);
+        textValue.replaceRange(cursorPosition, cursorPosition, text);
     controller.text = newText;
     controller.selection = TextSelection.fromPosition(
         TextPosition(offset: cursorPosition + text.length)

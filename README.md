@@ -8,8 +8,9 @@ Note Engineer, Flutter ile geliştirilmiş ve Supabase ile desteklenen, kullanı
 - **Not Oluşturma ve Düzenleme:** Düşüncelerinizi, fikirlerinizi veya yapılacaklar listelerinizi hızlıca yazın. Metninizi kolayca biçimlendirin ve başlıklar ekleyin.
 - **Matematiksel Hesaplamalar:** Notlarınızın içinden karmaşık matematiksel hesaplamalar yapın. Çeşitli matematiksel semboller, fonksiyonlar ve operatörler kullanın.
 - **Favoriler:** Önemli notlarınızı kolayca erişim için yıldızlayın.
+- **Düzenleme ve Arama:** Notlarınızı anahtar kelimeler veya ifadeler kullanarak arayın.
 - **Çöp Kutusu:** Yanlışlıkla not mu sildiniz? Endişelenmeyin! Çöp kutusundan kurtarın.
-- **Metin Dosyasına Kaydetme:** Notlarınızı paylaşmak veya yedeklemek için düz metin dosyasına aktarın.
+- **Metin Dosyasına Kaydetme ve Metin Dosyasını içe Aktarma :** Notlarınızı paylaşmak veya yedeklemek için düz metin dosyasına aktarın veya txt dosyalarını açıp düzenleyin.
 - **Güvenli ve Senkronize Edilmiş:** Notlarınız, verilerinizin güvenli ve her cihazdan erişilebilir olmasını sağlayan Supabase'de güvenli bir şekilde saklanır.
 - **Tema Seçenekleri:** Açık tema, koyu tema veya kendi özel temanızı seçin. Vurgu rengi, arkaplan rengi ve metin rengini özelleştirin.
 - **Kategorilenmiş Hesap Makineleri:** Hesap makinelerine kolayca erişin ve farklı kategoriler (Tarih & Zaman, Dönüşümler, Matematik) arasında gezinin.

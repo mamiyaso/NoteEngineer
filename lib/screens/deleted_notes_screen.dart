@@ -32,11 +32,13 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
 
     for (var i = 0; i < deletedNotes.length; i++) {
       deletedNotes[i]['title'] = deletedNotes[i]['title'] != null
-          ? await EncryptionService.decryptData(deletedNotes[i]['title'])
+          ? await EncryptionService.decryptData(
+              userId, deletedNotes[i]['title'])
           : '';
 
       deletedNotes[i]['content'] = deletedNotes[i]['content'] != null
-          ? await EncryptionService.decryptData(deletedNotes[i]['content'])
+          ? await EncryptionService.decryptData(
+              userId, deletedNotes[i]['content'])
           : '';
     }
 
@@ -123,8 +125,7 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
                   title: Text('deletedNotesScreen.deleteAllTitle'.tr(),
                       style: TextStyle(color: themeProvider.textColor)
                   ),
-                  content: Text(
-                      'deletedNotesScreen.deleteAllConfirmation'.tr(),
+                  content: Text('deletedNotesScreen.deleteAllConfirmation'.tr(),
                       style: TextStyle(color: themeProvider.textColor)
                   ),
                   backgroundColor: themeProvider.backgroundColor,
@@ -154,80 +155,82 @@ class DeletedNotesScreenState extends State<DeletedNotesScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-        itemCount: deletedNotes.length,
-        itemBuilder: (context, index) {
-          final note = deletedNotes[index];
-          return ListTile(
-            title: Text(
-                note['title'] != null ? note['title'] : '',
-                style: TextStyle(color: themeProvider.textColor)
-            ),
-            subtitle: Text(
-                note['content'] != null ? note['content'] : '',
-                style: TextStyle(color: themeProvider.textColor)
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.restore, color: themeProvider.accentColor),
-                  onPressed: () {
-                    _restoreNote(note['id']);
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: themeProvider.accentColor),
-                  onPressed: () async {
-                    final confirm = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                            'deletedNotesScreen.permanentlyDeleteTitle'
-                                .tr(),
-                            style: TextStyle(
-                                color: themeProvider.textColor
-                            )
+              itemCount: deletedNotes.length,
+              itemBuilder: (context, index) {
+                final note = deletedNotes[index];
+                return ListTile(
+                  title: Text(note['title'] != null ? note['title'] : '',
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
+                  subtitle: Text(note['content'] != null ? note['content'] : '',
+                      style: TextStyle(color: themeProvider.textColor)
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.restore,
+                            color: themeProvider.accentColor
                         ),
-                        content: Text(
-                            'deletedNotesScreen.permanentlyDeleteConfirmation'
-                                .tr(),
-                            style: TextStyle(
-                                color: themeProvider.textColor
-                            )
-                        ),
-                        backgroundColor: themeProvider.backgroundColor,
-                        actions: [
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).pop(false),
-                            child: Text('no'.tr(),
-                                style: TextStyle(
-                                    color: themeProvider.textColor
-                                )
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).pop(true),
-                            child: Text('yes'.tr(),
-                                style: TextStyle(
-                                    color: themeProvider.textColor
-                                )
-                            ),
-                          ),
-                        ],
+                        onPressed: () {
+                          _restoreNote(note['id']);
+                        },
                       ),
-                    );
-                    if (confirm == true) {
-                      _permanentlyDeleteNote(note['id']);
-                    }
-                  },
-                ),
-              ],
+                      IconButton(
+                        icon: Icon(Icons.delete,
+                            color: themeProvider.accentColor
+                        ),
+                        onPressed: () async {
+                          final confirm = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                  'deletedNotesScreen.permanentlyDeleteTitle'
+                                      .tr(),
+                                  style: TextStyle(
+                                      color: themeProvider.textColor
+                                  )
+                              ),
+                              content: Text(
+                                  'deletedNotesScreen.permanentlyDeleteConfirmation'
+                                      .tr(),
+                                  style: TextStyle(
+                                      color: themeProvider.textColor
+                                  )
+                              ),
+                              backgroundColor: themeProvider.backgroundColor,
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: Text('no'.tr(),
+                                      style: TextStyle(
+                                          color: themeProvider.textColor
+                                      )
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: Text('yes'.tr(),
+                                      style: TextStyle(
+                                          color: themeProvider.textColor
+                                      )
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirm == true) {
+                            _permanentlyDeleteNote(note['id']);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

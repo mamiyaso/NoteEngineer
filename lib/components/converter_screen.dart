@@ -40,6 +40,8 @@ class ConverterScreenState extends State<ConverterScreen> {
 
   final FocusNode _inputFocusNode = FocusNode();
   final FocusNode _outputFocusNode = FocusNode();
+  bool _isPositive = true;
+
 
   @override
   void initState() {
@@ -114,6 +116,17 @@ class ConverterScreenState extends State<ConverterScreen> {
             converted.truncateToDouble() == converted ? 0 : 2),
       );
     }
+  }
+
+  void _toggleSign() {
+    setState(() {
+      _isPositive = !_isPositive;
+      if (_inputController.text.isNotEmpty) {
+        double value = double.parse(_inputController.text);
+        _inputController.text = (_isPositive ? value.abs() : -value.abs()).toString();
+      }
+      _updateConversion();
+    });
   }
 
   void _onKeyPressed(String value) {
@@ -275,6 +288,67 @@ class ConverterScreenState extends State<ConverterScreen> {
                     onDeletePressed: _onDeletePressed,
                     unit: _isInputActive ? _inputUnit : _outputUnit,
                   )
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (widget.title == 'temperatureConverter.title'.tr()) {
+      return Scaffold(
+        backgroundColor: themeProvider.backgroundColor,
+        appBar: AppBar(
+          title: Text(widget.title, style: TextStyle(color: themeProvider.textColor)),
+          backgroundColor: themeProvider.accentColor,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Input Row
+              Row(
+                children: [
+                  _buildButton(widget.initialInputUnit,
+                      onPressed: () => _showUnitPicker(true), flex: 0.5),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: _inputController,
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
+                      textAlign: TextAlign.right,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        prefixText: _isPositive ? '' : '-',
+                        prefixStyle: TextStyle(fontSize: 24, color: themeProvider.textColor),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              // Output Row
+              Row(
+                children: [
+                  _buildButton(widget.initialOutputUnit,
+                      onPressed: () => _showUnitPicker(false), flex: 0.5),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: _outputController,
+                      style: TextStyle(fontSize: 24, color: themeProvider.textColor),
+                      textAlign: TextAlign.right,
+                      readOnly: true,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: TemperatureKeyPad(
+                  onKeyPressed: _onKeyPressed,
+                  onDeletePressed: _onDeletePressed,
+                  onToggleSign: _toggleSign,
+                ),
               ),
             ],
           ),
