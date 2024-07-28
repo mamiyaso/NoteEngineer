@@ -1,0 +1,313 @@
+{
+  "unitSelection": "Birim Seçin",
+  "systemSelection": "Sistem Seçin",
+  "numberSystemConverter": "Sayı Sistemi Dönüştürücü",
+  "invalidInput": "Geçersiz Giriş",
+  "invalidUnitConversion": "Geçersiz birim dönüşümü",
+
+  "ageCalculatorScreen":
+  {
+    "title": "Yaş Hesaplama",
+    "selectBirthDate": "Doğum Tarihini Seç",
+    "selectCurrentDate": "Güncel Tarihi Seç",
+    "agePrefix": "Yaş:",
+    "years": "yıl",
+    "months": "ay",
+    "days": "gün",
+    "selectBothDates": "Lütfen doğum tarihi ve güncel tarihi seçin"
+  },
+
+  "areaConverter":
+  {
+    "title": "Alan Dönüştürücü",
+    "squareKilometer": "Kilometre Kare",
+    "squareMeter": "Metre Kare",
+    "squareDecimeter": "Desimetre Kare",
+    "squareCentimeter": "Santimetre Kare",
+    "squareMillimeter": "Milimetre Kare",
+    "squareMicrometer": "Mikrometre Kare",
+    "squareMile": "Mil Kare",
+    "squareYard": "Yarda Kare",
+    "squareFoot": "Fit Kare",
+    "squareInch": "İnç Kare"
+  },
+
+  "basicCalculator":
+  {
+    "title": "Basit Hesap Makinesi",
+    "history": "Geçmiş",
+    "divideByZeroError": "Hata: Sıfıra bölme",
+    "invalidFormatError": "Geçersiz ifade formatı: {0}",
+    "rangeError": "İşlem sonucu çok büyük veya çok küçük.",
+    "invalidArgumentError": "Geçersiz argüman: {0}",
+    "invalidStateError": "Hesap makinesi durumu geçersiz: {0}",
+    "unknownError": "Bilinmeyen bir hata oluştu: {0}",
+    "error": "Hata"
+  },
+
+  "calculatorScreen":
+  {
+    "title": "Hesaplayıcı",
+    "ageCalculator": "Yaş Hesaplama",
+    "dateDifferenceCalculator": "Tarih Farkı Hesaplama",
+    "timeCalculator": "Zaman Hesaplama",
+    "lengthCalculator": "Uzunluk Hesaplama",
+    "massCalculator": "Kütle Hesaplama",
+    "temperatureCalculator": "Sıcaklık Hesaplama",
+    "volumeCalculator": "Hacim Hesaplama",
+    "numeralSystemCalculator": "Numeral Sistem Hesaplama",
+    "areaCalculator": "Alan Hesaplama",
+    "basicCalculator": "Hesap Makinesi"
+  },
+
+  "dateDifferenceCalculator":
+  {
+    "title": "Tarih Farkı Hesaplama",
+    "selectStartDate": "Başlangıç Tarihini Seç",
+    "selectEndDate": "Bitiş Tarihini Seç",
+    "differencePrefix": "Fark:",
+    "differenceSuffix": "gün",
+    "selectBothDates": "Lütfen iki tarih seçin"
+  },
+
+  "deletedNotesScreen":
+  {
+    "title": "Silinen Notlar",
+    "restoreAllTitle": "Tümünü Geri Yükle",
+    "restoreAllConfirmation": "Tüm silinen notları geri yüklemek istediğinize emin misiniz?",
+    "deleteAllTitle": "Tümünü Sil",
+    "deleteAllConfirmation": "Tüm silinen notları kalıcı olarak silmek istediğinize emin misiniz?",
+    "permanentlyDeleteTitle": "Notu Kalıcı Olarak Sil",
+    "permanentlyDeleteConfirmation": "Bu notu kalıcı olarak silmek istediğinize emin misiniz?",
+    "no": "Hayır",
+    "yes": "Evet"
+  },
+
+  "forgotPasswordScreen":
+  {
+    "forgotPassword": "Şifremi Unuttum",
+    "title": "Şifremi Unuttum",
+    "email": "E-posta",
+    "resetPassword": "Şifreyi Sıfırla",
+    "resetEmailSent": "Şifre sıfırlama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
+    "resetFailed": "Sıfırlama e-postası gönderilemedi. Lütfen tekrar deneyin."
+  },
+
+  "historyScreen":
+  {
+    "title": "Geçmiş",
+    "clearHistory": "Geçmişi Temizle?",
+    "clearHistoryConfirmation": "Geçmişi temizlemek istediğinize emin misiniz?",
+    "no": "Hayır",
+    "yes": "Evet"
+  },
+
+  "homeScreen":
+  {
+    "title": "Notlar",
+    "searchNotes": "Notlarda Ara...",
+    "settings": "Ayarlar",
+    "allNotes": "Tümü",
+    "favorites": "Favoriler",
+    "creationDate": "Oluşturma Tarihi",
+    "modificationDate": "Değiştirilme Tarihi",
+    "byTitle": "Başlığa Göre",
+    "untitled": "Başlıksız",
+    "errorOccured": "Bir hata oluştu!"
+  },
+  "noteOptions":
+  {
+    "addToFavorites": "Favorilere Ekle",
+    "removeFromFavorites": "Favorilerden Kaldır",
+    "edit": "Düzenle",
+    "delete": "Sil"
+  },
+
+  "lengthConverter":
+  {
+    "title": "Uzunluk Dönüştürücü",
+    "kilometer": "Kilometre",
+    "meter": "Metre",
+    "decimeter": "Desimetre",
+    "centimeter": "Santimetre",
+    "millimeter": "Milimetre",
+    "micrometer": "Mikrometre",
+    "mile": "Mil",
+    "yard": "Yard",
+    "foot": "Adım",
+    "inch": "İnç"
+  },
+
+  "loginScreen":
+  {
+    "login": "Giriş Yap",
+    "signUp": "Kayıt Ol",
+    "email": "Email",
+    "password": "Şifre",
+    "passwordConfirmation": "Şifre (Tekrar)",
+    "noAccount": "Hesabınız yok mu? Kayıt olun",
+    "haveAccount": "Hesabınız var mı? Giriş yapın",
+    "invalidEmailOrPassword": "Geçersiz e-posta veya şifre!",
+    "userNotFound": "Kullanıcı bulunamadı!",
+    "loginFailed": "Giriş yapılamadı. Lütfen daha sonra tekrar deneyin.",
+    "passwordsNotMatch": "Şifreler eşleşmiyor!",
+    "registrationSuccessful": "Kayıt başarılı!",
+    "registrationFailed": "Kayıt Başarısız!",
+    "emailNotVerified": "E-posta doğrulanmadı",
+    "unexpectedError": "Beklenmeyen bir hata oluştu",
+    "verificationEmailSent": "Doğrulama e-postası gönderildi",
+    "verificationEmailResent": "Doğrulama e-postası yeniden gönderildi",
+    "resendFailed": "Doğrulama e-postası yeniden gönderilemedi",
+    "checkEmailForVerification": "Lütfen doğrulama için e-postanızı kontrol edin",
+    "resendVerificationEmail": "Doğrulama E-postasını Yeniden Gönder",
+    "backToLogin": "Girişe Dön",
+    "forgotPassword": "Şifremi Unuttum"
+  },
+
+  "massConverter":
+  {
+    "title": "Kütle Dönüştürücü",
+    "micrograms": "Mikrogram",
+    "milligram": "Miligram",
+    "gram": "Gram",
+    "kilogram": "Kilogram",
+    "tonne": "Ton",
+    "pound": "Pound",
+    "ounce": "Ons"
+  },
+
+  "noteEditScreen":
+  {
+    "title": "Başlık",
+    "noDate": "Tarih Yok",
+    "delete": "Sil",
+    "save": "Kaydet",
+    "calculate": "Hesapla",
+    "saveAsTxt": "TXT Olarak Kaydet",
+    "enterTitle": "Başlık Girin",
+    "enterNotes": "Notlarınızı buraya yazın...",
+    "enterMathExpression": "Matematiksel ifadeyi buraya girin...",
+    "invalidMathExpression": "Geçersiz matematiksel ifade!",
+    "noteSaved": "Notunuz {filename} olarak kaydedildi",
+    "errorSavingFile": "Dosya kaydedilirken hata oluştu: {error}",
+    "addFromDevice": "Cihazdan Ekle",
+    "warningTitle": "Uyarı",
+    "warningContent": "Mevcut notun içeriği var. Ne yapmak istersiniz?",
+    "overwrite": "Üzerine Yaz",
+    "createNew": "Yeni Not Oluştur",
+    "expressionResult": "İfade: {message}",
+    "true": "Doğru",
+    "false": "Yanlış",
+    "errorSavingNote": "Not kaydedilirken hata oluştu: {error}"
+  },
+
+  "numeralSystemConverter":
+  {
+    "title": "Sayı Sistemi Dönüştürücü",
+    "binary": "2'lik (İkili)",
+    "octal": "8'lik (Sekizlik)",
+    "decimal": "10'luk (Onluk)",
+    "hexadecimal": "16'lık (Onaltılık)"
+  },
+
+  "resetPasswordScreen":
+  {
+    "title": "Parola Değiştir",
+    "oldPassword": "Eski Parola",
+    "newPassword": "Yeni Parola",
+    "confirmPassword": "Yeni Parola (Tekrar)",
+    "changePassword": "Parolayı Değiştir",
+    "passwordsDoNotMatch": "Girilen parolalar uyuşmuyor!",
+    "userSessionNotFound": "Kullanıcı oturumu bulunamadı!",
+    "passwordChangedSuccessfully": "Parola başarıyla değiştirildi!",
+    "invalidOldPassword": "Geçersiz eski parola!",
+    "errorChangingPassword": "Parola değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+  },
+
+  "settingsScreen":
+  {
+    "title": "Ayarlar",
+    "accountSettings": "Hesap Ayarları",
+    "changePassword": "Parolayı Değiştir",
+    "logout": "Çıkış Yap",
+    "trash": "Çöp Kutusu",
+    "deletedNotes": "Silinen Notlar",
+    "fileSaveLocation": "Dosya Kaydetme Konumu",
+    "notSelected": "Seçilmedi",
+    "themeSettings": "Tema Ayarları",
+    "selectTheme": "Tema Seç",
+    "language": "Dil",
+    "selectLanguage": "Dil Seç",
+    "deleteAccount": "Hesabımı Sil",
+    "deleteAccountTitle": "Hesap Silme",
+    "deleteAccountWarning": "Bu işlem tüm notlarınızı ve hesabınızı silecektir.",
+    "deleteAccountConfirmTitle": "Emin misiniz?",
+    "deleteAccountConfirmContent": "Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+    "deleteAccountError": "Hesap silinirken bir hata oluştu.",
+    "cancel": "İptal",
+    "ok": "Tamam",
+    "no": "Hayır",
+    "yes": "Evet"
+  },
+
+  "temperatureConverter":
+  {
+    "title": "Sıcaklık Dönüştürücü",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kelvin": "Kelvin"
+  },
+
+  "themeSettingsScreen":
+  {
+    "title": "Tema Ayarları",
+    "themeMode": "Tema Modu",
+    "lightTheme": "Açık Tema",
+    "darkTheme": "Koyu Tema",
+    "createYourTheme": "Kendi Temanı Oluştur",
+    "accentColor": "Vurgu Rengi",
+    "selectAccentColor": "Vurgu Rengi Seç",
+    "backgroundColor": "Arkaplan Rengi",
+    "selectBackgroundColor": "Arkaplan Rengi Seç",
+    "textColor": "Metin Rengi",
+    "selectTextColor": "Metin Rengi Seç",
+    "select": "Seç"
+  },
+
+  "timeConverter":
+  {
+    "title": "Zaman Dönüştürücü",
+    "year": "Yıl",
+    "week": "Hafta",
+    "day": "Gün",
+    "hour": "Saat",
+    "minute": "Dakika",
+    "second": "Saniye",
+    "millisecond": "Milisaniye",
+    "microsecond": "Mikrosaniye"
+  },
+
+  "volumeConverter":
+  {
+    "title": "Hacim Dönüştürücü",
+    "cubicKilometer": "Kilometreküp",
+    "cubicMeter": "Metreküp",
+    "cubicDecimeter": "Desimetreküp",
+    "cubicCentimeter": "Santimetreküp",
+    "cubicMillimeter": "Milimetreküp",
+    "hectoliter": "Hektolitre",
+    "liter": "Litre",
+    "deciliter": "Desilitre",
+    "centiliter": "Santilitre",
+    "milliliter": "Mililitre",
+    "cubicFoot": "Adımküp",
+    "cubicInch": "İnçküp",
+    "cubicYard": "Yardküp",
+    "acreFoot": "Dönüm-Adım"
+  },
+
+  "encryptionService":
+  {
+    "encryptionKeyNotFound": "Şifreleme anahtarı bulunamadı!"
+  }
+}
